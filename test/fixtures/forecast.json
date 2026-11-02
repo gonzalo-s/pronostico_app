@@ -1,20 +1,358 @@
 {
   "data": {
     "steps": [
-      { "locality": "BUENOS AIRES", "at": "2026-11-02T18:00:00.000Z", "temp_c": 24, "wind_dir_deg": 90, "wind_kmh": 12, "precip_mm": 0, "updated_at": "2026-11-02T12:00:00.000Z" },
-      { "locality": "BUENOS AIRES", "at": "2026-11-02T21:00:00.000Z", "temp_c": 22, "wind_dir_deg": 100, "wind_kmh": 10, "precip_mm": 0, "updated_at": "2026-11-02T12:00:00.000Z" },
-      { "locality": "BUENOS AIRES", "at": "2026-11-03T00:00:00.000Z", "temp_c": 18.1, "wind_dir_deg": 120, "wind_kmh": 8, "precip_mm": 0, "updated_at": "2026-11-02T12:00:00.000Z" },
-      { "locality": "BUENOS AIRES", "at": "2026-11-03T03:00:00.000Z", "temp_c": 15.2, "wind_dir_deg": 150, "wind_kmh": 6, "precip_mm": 2.5, "updated_at": "2026-11-02T12:00:00.000Z" },
-      { "locality": "BUENOS AIRES", "at": "2026-11-03T09:00:00.000Z", "temp_c": 17, "wind_dir_deg": 180, "wind_kmh": 9, "precip_mm": 0, "updated_at": "2026-11-02T12:00:00.000Z" }
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-02T18:00:00.000Z",
+        "temp_c": 24,
+        "wind_dir_deg": 159,
+        "wind_kmh": 10,
+        "precip_mm": 0.2,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-02T21:00:00.000Z",
+        "temp_c": 22.1,
+        "wind_dir_deg": 121,
+        "wind_kmh": 11,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-03T00:00:00.000Z",
+        "temp_c": 16.4,
+        "wind_dir_deg": 92,
+        "wind_kmh": 12,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-03T03:00:00.000Z",
+        "temp_c": 15,
+        "wind_dir_deg": 95,
+        "wind_kmh": 11,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-03T06:00:00.000Z",
+        "temp_c": 13.7,
+        "wind_dir_deg": 86,
+        "wind_kmh": 11,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-03T09:00:00.000Z",
+        "temp_c": 13.6,
+        "wind_dir_deg": 104,
+        "wind_kmh": 13,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-03T12:00:00.000Z",
+        "temp_c": 18.1,
+        "wind_dir_deg": 78,
+        "wind_kmh": 18,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-03T15:00:00.000Z",
+        "temp_c": 20.9,
+        "wind_dir_deg": 79,
+        "wind_kmh": 20,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-03T18:00:00.000Z",
+        "temp_c": 19.9,
+        "wind_dir_deg": 103,
+        "wind_kmh": 16,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-03T21:00:00.000Z",
+        "temp_c": 17.6,
+        "wind_dir_deg": 118,
+        "wind_kmh": 9,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-04T00:00:00.000Z",
+        "temp_c": 15.9,
+        "wind_dir_deg": 76,
+        "wind_kmh": 11,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-04T03:00:00.000Z",
+        "temp_c": 15.1,
+        "wind_dir_deg": 128,
+        "wind_kmh": 10,
+        "precip_mm": 0.3,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-04T06:00:00.000Z",
+        "temp_c": 14.9,
+        "wind_dir_deg": 114,
+        "wind_kmh": 9,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-04T09:00:00.000Z",
+        "temp_c": 14.8,
+        "wind_dir_deg": 161,
+        "wind_kmh": 6,
+        "precip_mm": 0.3,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-04T12:00:00.000Z",
+        "temp_c": 18.4,
+        "wind_dir_deg": 175,
+        "wind_kmh": 6,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-04T15:00:00.000Z",
+        "temp_c": 20.1,
+        "wind_dir_deg": 229,
+        "wind_kmh": 15,
+        "precip_mm": 2.2,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-04T18:00:00.000Z",
+        "temp_c": 22.8,
+        "wind_dir_deg": 231,
+        "wind_kmh": 19,
+        "precip_mm": 1.6,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-04T21:00:00.000Z",
+        "temp_c": 19.8,
+        "wind_dir_deg": 227,
+        "wind_kmh": 22,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-05T00:00:00.000Z",
+        "temp_c": 14.1,
+        "wind_dir_deg": 239,
+        "wind_kmh": 11,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-05T03:00:00.000Z",
+        "temp_c": 12.5,
+        "wind_dir_deg": 234,
+        "wind_kmh": 12,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-05T06:00:00.000Z",
+        "temp_c": 11.1,
+        "wind_dir_deg": 258,
+        "wind_kmh": 8,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-05T09:00:00.000Z",
+        "temp_c": 10.4,
+        "wind_dir_deg": 269,
+        "wind_kmh": 8,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-05T12:00:00.000Z",
+        "temp_c": 17.3,
+        "wind_dir_deg": 264,
+        "wind_kmh": 14,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-05T15:00:00.000Z",
+        "temp_c": 22.4,
+        "wind_dir_deg": 250,
+        "wind_kmh": 17,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-05T18:00:00.000Z",
+        "temp_c": 23.7,
+        "wind_dir_deg": 236,
+        "wind_kmh": 17,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-05T21:00:00.000Z",
+        "temp_c": 22.3,
+        "wind_dir_deg": 192,
+        "wind_kmh": 7,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-06T00:00:00.000Z",
+        "temp_c": 15.9,
+        "wind_dir_deg": 93,
+        "wind_kmh": 8,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-06T03:00:00.000Z",
+        "temp_c": 15.1,
+        "wind_dir_deg": 17,
+        "wind_kmh": 12,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-06T06:00:00.000Z",
+        "temp_c": 14.8,
+        "wind_dir_deg": 1,
+        "wind_kmh": 11,
+        "precip_mm": 0,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-06T09:00:00.000Z",
+        "temp_c": 13.7,
+        "wind_dir_deg": 295,
+        "wind_kmh": 15,
+        "precip_mm": 0.5,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-06T12:00:00.000Z",
+        "temp_c": 13.9,
+        "wind_dir_deg": 244,
+        "wind_kmh": 11,
+        "precip_mm": 3.6,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-06T15:00:00.000Z",
+        "temp_c": 15,
+        "wind_dir_deg": 263,
+        "wind_kmh": 5,
+        "precip_mm": 3.9,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-06T18:00:00.000Z",
+        "temp_c": 16.6,
+        "wind_dir_deg": 288,
+        "wind_kmh": 13,
+        "precip_mm": 2.1,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-06T21:00:00.000Z",
+        "temp_c": 13.4,
+        "wind_dir_deg": 188,
+        "wind_kmh": 30,
+        "precip_mm": 3.2,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      },
+      {
+        "locality": "BUENOS_AIRES",
+        "at": "2026-11-07T00:00:00.000Z",
+        "temp_c": 9.5,
+        "wind_dir_deg": 189,
+        "wind_kmh": 26,
+        "precip_mm": 0.1,
+        "updated_at": "2026-11-02T15:46:24.016Z"
+      }
     ],
     "days": [
-      { "date": "2026-11-02", "temp_min_c": 18.1, "temp_max_c": 24, "precip_mm_total": 0 },
-      { "date": "2026-11-03", "temp_min_c": 15.2, "temp_max_c": 17, "precip_mm_total": 2.5 }
+      {
+        "date": "2026-11-02",
+        "temp_min_c": 16.4,
+        "temp_max_c": 24,
+        "precip_mm_total": 0.2
+      },
+      {
+        "date": "2026-11-03",
+        "temp_min_c": 13.6,
+        "temp_max_c": 20.9,
+        "precip_mm_total": 0
+      },
+      {
+        "date": "2026-11-04",
+        "temp_min_c": 14.1,
+        "temp_max_c": 22.8,
+        "precip_mm_total": 4.4
+      },
+      {
+        "date": "2026-11-05",
+        "temp_min_c": 10.4,
+        "temp_max_c": 23.7,
+        "precip_mm_total": 0
+      },
+      {
+        "date": "2026-11-06",
+        "temp_min_c": 9.5,
+        "temp_max_c": 16.6,
+        "precip_mm_total": 13.4
+      }
     ]
   },
   "meta": {
     "source": "SMN",
-    "updated_at": "2026-11-02T12:00:00.000Z",
+    "updated_at": "2026-11-02T15:46:24.016Z",
     "note": "Pronóstico basado en un modelo numérico; puede diferir del pronóstico oficial del SMN."
   }
 }

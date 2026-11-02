@@ -1,8 +1,88 @@
 {
   "data": [
-    { "id": 1, "name": "BUENOS AIRES", "province": "CAPITAL FEDERAL", "lat": -34.58, "lon": -58.48, "altitude_m": 25 },
-    { "id": 2, "name": "CORDOBA AERO", "province": "CORDOBA", "lat": -31.32, "lon": -64.21, "altitude_m": 474 },
-    { "id": 3, "name": "USHUAIA AERO", "province": "TIERRA DEL FUEGO", "lat": -54.84, "lon": -68.31, "altitude_m": null }
+    {
+      "id": 34,
+      "name": "BUENOS AIRES OBSERVATORIO",
+      "province": "CAPITAL FEDERAL",
+      "lat": -34.583333333333336,
+      "lon": -58.483333333333334,
+      "altitude_m": 25
+    },
+    {
+      "id": 33,
+      "name": "AEROPARQUE AERO",
+      "province": "CAPITAL FEDERAL",
+      "lat": -34.55,
+      "lon": -58.416666666666664,
+      "altitude_m": 6
+    },
+    {
+      "id": 7,
+      "name": "AZUL AERO",
+      "province": "BUENOS AIRES",
+      "lat": -36.81666666666667,
+      "lon": -59.88333333333333,
+      "altitude_m": 147
+    },
+    {
+      "id": 8,
+      "name": "BAHIA BLANCA AERO",
+      "province": "BUENOS AIRES",
+      "lat": -38.7,
+      "lon": -62.15,
+      "altitude_m": 83
+    },
+    {
+      "id": 85,
+      "name": "BARILOCHE AERO",
+      "province": "RIO NEGRO",
+      "lat": -41.13333333333333,
+      "lon": -71.15,
+      "altitude_m": 835
+    },
+    {
+      "id": 1,
+      "name": "BASE BELGRANO II",
+      "province": "ANTARTIDA",
+      "lat": -77.86666666666666,
+      "lon": -34.61666666666667,
+      "altitude_m": 256
+    },
+    {
+      "id": 2,
+      "name": "BASE CARLINI (EX JUBANY)",
+      "province": "ANTARTIDA",
+      "lat": -62.233333333333334,
+      "lon": -58.65,
+      "altitude_m": 11
+    },
+    {
+      "id": 3,
+      "name": "BASE ESPERANZA",
+      "province": "ANTARTIDA",
+      "lat": -63.38333333333333,
+      "lon": -56.983333333333334,
+      "altitude_m": 24
+    },
+    {
+      "id": 4,
+      "name": "BASE MARAMBIO",
+      "province": "ANTARTIDA",
+      "lat": -64.23333333333333,
+      "lon": -56.61666666666667,
+      "altitude_m": 198
+    },
+    {
+      "id": 5,
+      "name": "BASE ORCADAS",
+      "province": "ANTARTIDA",
+      "lat": -60.733333333333334,
+      "lon": -44.733333333333334,
+      "altitude_m": 12
+    }
   ],
-  "meta": { "source": "SMN", "updated_at": null }
+  "meta": {
+    "source": "SMN",
+    "updated_at": null
+  }
 }
