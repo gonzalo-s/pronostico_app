@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id": 1, "name": "BUENOS AIRES", "province": "CAPITAL FEDERAL",
+    "observed_at": "2026-11-02T17:00:00.000Z", "sky": null, "visibility_km": null,
+    "temp_c": 19, "feels_like_c": null, "humidity_pct": null, "wind_dir": null, "wind_kmh": 5,
+    "wind_variable": true, "pressure_hpa": null, "updated_at": "2026-11-02T17:17:30.000Z"
+  },
+  "meta": { "source": "SMN", "updated_at": "2026-11-02T17:17:30.000Z" }
+}

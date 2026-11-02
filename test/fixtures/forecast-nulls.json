@@ -1,0 +1,11 @@
+{
+  "data": {
+    "steps": [
+      { "locality": "BUENOS AIRES", "at": "2026-11-02T18:00:00.000Z", "temp_c": null, "wind_dir_deg": null, "wind_kmh": null, "precip_mm": null, "updated_at": "2026-11-02T12:00:00.000Z" }
+    ],
+    "days": [
+      { "date": "2026-11-02", "temp_min_c": null, "temp_max_c": null, "precip_mm_total": 0 }
+    ]
+  },
+  "meta": { "source": "SMN", "updated_at": "2026-11-02T12:00:00.000Z", "note": "Pronóstico basado en un modelo numérico; puede diferir del pronóstico oficial del SMN." }
+}
