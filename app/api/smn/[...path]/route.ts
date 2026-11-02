@@ -1,4 +1,4 @@
-import { isAllowedPath } from '@/lib/proxyAllowlist'
+import { isAllowedPath, nearestQuery } from '@/lib/proxyAllowlist'
 
 const UPSTREAM_TIMEOUT_MS = 10_000
 const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' }
@@ -8,12 +8,19 @@ function errorResponse(status: number, code: string, message: string): Response 
 }
 
 export async function GET(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ path: string[] }> },
 ): Promise<Response> {
   const { path } = await params
   const route = path.join('/')
   if (!isAllowedPath(route)) return errorResponse(404, 'not_found', 'Ruta no encontrada')
+
+  let query = ''
+  if (route === 'stations/nearest') {
+    const q = nearestQuery(new URL(req.url).searchParams)
+    if (q === null) return errorResponse(400, 'bad_request', 'Coordenadas inválidas')
+    query = `?${q}`
+  }
 
   const base = process.env.SMN_API_URL
   const apiKey = process.env.SMN_API_KEY
@@ -23,7 +30,7 @@ export async function GET(
   }
 
   try {
-    const upstream = await fetch(`${base}/v1/${route}`, {
+    const upstream = await fetch(`${base}/v1/${route}${query}`, {
       headers: { 'X-API-Key': apiKey, Accept: 'application/json' },
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
       cache: 'no-store',
