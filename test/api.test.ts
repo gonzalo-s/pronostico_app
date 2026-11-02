@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { ApiError, getCurrent, getForecast, getStations, shouldRetry } from '@/lib/api'
+import { ApiError, getCurrent, getForecast, getNearestStation, getStations, shouldRetry } from '@/lib/api'
 import current from './fixtures/current.json'
 import forecast from './fixtures/forecast.json'
 import stations from './fixtures/stations.json'
@@ -18,6 +18,18 @@ describe('cliente de la API', () => {
     expect((await getCurrent(ID)).data.id).toBe(ID)
     expect((await getForecast(ID)).data.days.length).toBeGreaterThan(0)
     expect(fetchMock).toHaveBeenCalledWith(`/api/smn/stations/${ID}/current`)
+  })
+
+  it('getNearestStation redondea las coordenadas y valida la respuesta', async () => {
+    const body = {
+      data: { id: 7, name: 'AEROPARQUE AERO', province: 'CAPITAL FEDERAL', lat: -34.55, lon: -58.41, altitude_m: 6, distance_km: 3.2 },
+      meta: { source: 'SMN', updated_at: null },
+    }
+    const fetchMock = mockFetch({ 'stations/nearest?lat=-34.6&lon=-58.38': { body } })
+    const res = await getNearestStation(-34.6037, -58.3816)
+    expect(res.data.id).toBe(7)
+    expect(res.data.distance_km).toBe(3.2)
+    expect(fetchMock).toHaveBeenCalledWith('/api/smn/stations/nearest?lat=-34.6&lon=-58.38')
   })
 
   it('404 → not_found', async () => {

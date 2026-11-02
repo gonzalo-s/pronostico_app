@@ -1,5 +1,6 @@
 import type { ZodType } from 'zod'
-import { currentResponse, forecastResponse, stationsResponse } from '@/lib/schemas'
+import { roundCoord } from '@/lib/geolocation'
+import { currentResponse, forecastResponse, nearestStationResponse, stationsResponse } from '@/lib/schemas'
 
 export type ApiErrorKind = 'not_found' | 'network' | 'upstream' | 'contract'
 
@@ -37,6 +38,8 @@ async function getJson<T>(route: string, schema: ZodType<T>): Promise<T> {
 export const getStations = () => getJson('stations', stationsResponse)
 export const getCurrent = (id: number) => getJson(`stations/${id}/current`, currentResponse)
 export const getForecast = (id: number) => getJson(`stations/${id}/forecast`, forecastResponse)
+export const getNearestStation = (lat: number, lon: number) =>
+  getJson(`stations/nearest?lat=${roundCoord(lat)}&lon=${roundCoord(lon)}`, nearestStationResponse)
 
 export function shouldRetry(count: number, err: unknown): boolean {
   if (err instanceof ApiError && (err.kind === 'not_found' || err.kind === 'contract')) return false
