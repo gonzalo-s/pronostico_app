@@ -18,8 +18,10 @@ type Route = { status?: number; body: unknown }
 function routes(over: Record<string, Route> = {}): Record<string, Route> {
   const base: Record<string, Route> = { stations: { body: stationsJson } }
   for (const s of list) {
-    base[`stations/${s.id}/current`] = { body: current }
-    base[`stations/${s.id}/forecast`] = { body: forecast }
+    // Pin timestamps to "now" so tests never depend on the fixtures' fixed dates vs the wall clock.
+    const fresh = new Date().toISOString()
+    base[`stations/${s.id}/current`] = { body: { ...current, meta: { ...current.meta, updated_at: fresh } } }
+    base[`stations/${s.id}/forecast`] = { body: { ...forecast, meta: { ...forecast.meta, updated_at: fresh } } }
   }
   return { ...base, ...over }
 }
@@ -57,9 +59,12 @@ describe('WeatherScreen', () => {
 
   it('datos con más de 6 h → aviso de desactualizados', async () => {
     const stale = { ...current, meta: { ...current.meta, updated_at: '2020-01-01T00:00:00.000Z' } }
+    // forecast stays fresh (routes() default) so exactly one banner is expected
     mockFetch(routes({ [`stations/${defaultStation.id}/current`]: { body: stale } }))
     renderWithProviders(<WeatherScreen />)
     expect(await screen.findByText('Datos desactualizados')).toBeInTheDocument()
+    expect(await screen.findByText('Próximos días')).toBeInTheDocument()
+    expect(screen.getAllByText('Datos desactualizados')).toHaveLength(1)
   })
 
   it('datos frescos → sin aviso de desactualizados', async () => {
@@ -88,6 +93,7 @@ describe('WeatherScreen', () => {
     expect(await screen.findByText('Datos desactualizados')).toBeInTheDocument()
     expect(await screen.findByText('Próximos días')).toBeInTheDocument()
     expect(await screen.findByText('Ahora')).toBeInTheDocument()
+    expect(screen.getAllByText('Datos desactualizados')).toHaveLength(1)
   })
 
   it('respuesta fuera de contrato → "Respuesta inesperada de la API"', async () => {
@@ -122,6 +128,7 @@ describe('WeatherScreen', () => {
       .find((b) => b.querySelector('.station__name')?.textContent === titleCase(other.name))!
     await userEvent.click(option)
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/api/smn/stations/${other.id}/current`))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/api/smn/stations/${other.id}/forecast`))
     expect(localStorage.getItem('pronostico:stationId')).toBe(String(other.id))
     expect(await headerName(other.name)).toBeInTheDocument()
   })
