@@ -22,6 +22,8 @@ describe('isAllowedPath', () => {
   it.each([
     'health', 'internal/ingest', 'stations/abc/current', 'stations/0/current', 'stations/-1/current',
     'stations/1/history', 'stations/nearest', 'stations/1/current/extra', '../stations', '', 'stations/',
+    'stations/05/current', 'stations/12345678901/current', 'Stations', 'stations/5/CURRENT',
+    'stations//5/current', 'stations\n',
   ])('rechaza %s', (p) => {
     expect(isAllowedPath(p)).toBe(false)
   })
@@ -49,6 +51,25 @@ describe('GET /api/smn/[...path]', () => {
     expect(res.headers.get('content-type')).toContain('application/json')
     expect(res.headers.get('cache-control')).toContain('s-maxage=300')
     expect(JSON.stringify([...res.headers])).not.toContain('secret-test-key')
+  })
+
+  it('no sigue redirects del upstream (redirect: error)', async () => {
+    const fetchMock = vi.fn(async () => new Response('{"data":1}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    await call(['stations'])
+    const [, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit]
+    expect(init.redirect).toBe('error')
+  })
+
+  it('error de redirect (TypeError) → 502 genérico sin filtrar la clave', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => { throw new TypeError('fetch failed: unexpected redirect secret-test-key') }))
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const res = await call(['stations'])
+    const text = await res.text()
+    expect(res.status).toBe(502)
+    expect(text).toContain('upstream_error')
+    expect(text).not.toContain('secret-test-key')
+    expect(text).not.toContain('redirect')
   })
 
   it('404 upstream se propaga', async () => {

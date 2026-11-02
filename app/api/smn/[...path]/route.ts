@@ -27,6 +27,7 @@ export async function GET(
       headers: { 'X-API-Key': apiKey, Accept: 'application/json' },
       signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
       cache: 'no-store',
+      redirect: 'error',
     })
     if (upstream.status === 200) {
       return new Response(await upstream.text(), {
