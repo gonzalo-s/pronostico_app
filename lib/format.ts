@@ -54,6 +54,12 @@ export function isStale(updatedAt: string | null, now: Date, hours = 6): boolean
   return updatedAt !== null && now.getTime() - Date.parse(updatedAt) > hours * 3600_000
 }
 
+const PARTICLES = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y'])
+
 export function titleCase(s: string): string {
-  return s.toLowerCase().replace(/(^|[\s\-/(])(\p{L})/gu, (_, sep: string, ch: string) => sep + ch.toUpperCase())
+  return s
+    .toLowerCase()
+    .replace(/(^|[\s\-/(])(\p{L}+)/gu, (_, sep: string, word: string, offset: number) =>
+      offset > 0 && PARTICLES.has(word) ? sep + word : sep + word.charAt(0).toUpperCase() + word.slice(1),
+    )
 }

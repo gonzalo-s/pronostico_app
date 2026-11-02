@@ -5,27 +5,29 @@ import forecast from './fixtures/forecast.json'
 import stations from './fixtures/stations.json'
 import { mockFetch } from './helpers'
 
+const ID = current.data.id
+
 describe('cliente de la API', () => {
   it('devuelve datos validados', async () => {
     const fetchMock = mockFetch({
       stations: { body: stations },
-      'stations/1/current': { body: current },
-      'stations/1/forecast': { body: forecast },
+      [`stations/${ID}/current`]: { body: current },
+      [`stations/${ID}/forecast`]: { body: forecast },
     })
     expect((await getStations()).data.length).toBeGreaterThan(0)
-    expect((await getCurrent(1)).data.id).toBe(1)
-    expect((await getForecast(1)).data.days.length).toBeGreaterThan(0)
-    expect(fetchMock).toHaveBeenCalledWith('/api/smn/stations/1/current')
+    expect((await getCurrent(ID)).data.id).toBe(ID)
+    expect((await getForecast(ID)).data.days.length).toBeGreaterThan(0)
+    expect(fetchMock).toHaveBeenCalledWith(`/api/smn/stations/${ID}/current`)
   })
 
   it('404 → not_found', async () => {
-    mockFetch({ 'stations/1/current': { status: 404, body: { error: { code: 'not_found', message: 'x' } } } })
-    await expect(getCurrent(1)).rejects.toMatchObject({ name: 'ApiError', kind: 'not_found' })
+    mockFetch({ [`stations/${ID}/current`]: { status: 404, body: { error: { code: 'not_found', message: 'x' } } } })
+    await expect(getCurrent(ID)).rejects.toMatchObject({ name: 'ApiError', kind: 'not_found' })
   })
 
   it('5xx → upstream', async () => {
-    mockFetch({ 'stations/1/current': { status: 502, body: { error: { code: 'upstream_error', message: 'x' } } } })
-    await expect(getCurrent(1)).rejects.toMatchObject({ kind: 'upstream' })
+    mockFetch({ [`stations/${ID}/current`]: { status: 502, body: { error: { code: 'upstream_error', message: 'x' } } } })
+    await expect(getCurrent(ID)).rejects.toMatchObject({ kind: 'upstream' })
   })
 
   it('fallo de red → network', async () => {
@@ -35,8 +37,8 @@ describe('cliente de la API', () => {
 
   it('respuesta que no cumple el esquema → contract', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
-    mockFetch({ 'stations/1/current': { body: { data: {}, meta: {} } } })
-    await expect(getCurrent(1)).rejects.toMatchObject({ kind: 'contract' })
+    mockFetch({ [`stations/${ID}/current`]: { body: { data: {}, meta: {} } } })
+    await expect(getCurrent(ID)).rejects.toMatchObject({ kind: 'contract' })
   })
 
   it('cuerpo no JSON → contract', async () => {

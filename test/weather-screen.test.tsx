@@ -1,4 +1,5 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { QueryClient } from '@tanstack/react-query'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { WeatherScreen } from '@/features/weather/WeatherScreen'
@@ -131,5 +132,39 @@ describe('WeatherScreen', () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/api/smn/stations/${other.id}/forecast`))
     expect(localStorage.getItem('pronostico:stationId')).toBe(String(other.id))
     expect(await headerName(other.name)).toBeInTheDocument()
+  })
+
+  it('refetch fallido con datos previos: aviso con Reintentar y datos visibles', async () => {
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false, networkMode: 'always' } } })
+    mockFetch(routes())
+    renderWithProviders(<WeatherScreen />, client)
+    expect(await screen.findByText('Ahora')).toBeInTheDocument()
+    expect(await screen.findByText('Próximos días')).toBeInTheDocument()
+    const failing = mockFetch(routes({ [`stations/${defaultStation.id}/current`]: { status: 502, body: {} } }))
+    await act(async () => {
+      await client.refetchQueries({ queryKey: ['current'] })
+    })
+    expect(await screen.findByText(/Mostrando los últimos datos guardados/)).toBeInTheDocument()
+    expect(screen.getByText('Ahora')).toBeInTheDocument()
+    const calls = failing.mock.calls.length
+    mockFetch(routes())
+    await userEvent.click(screen.getByRole('button', { name: 'Reintentar' }))
+    await waitFor(() => expect(screen.queryByText(/Mostrando los últimos datos guardados/)).toBeNull())
+    expect(calls).toBeGreaterThan(0)
+  })
+
+  it('sin conexión y sin datos: no promete datos guardados', async () => {
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+    mockFetch({})
+    renderWithProviders(<WeatherScreen />)
+    expect(await screen.findByText('Sin conexión.')).toBeInTheDocument()
+    expect(screen.queryByText(/Mostrando los últimos datos guardados/)).toBeNull()
+  })
+
+  it('sin conexión con datos: indica que son los últimos guardados', async () => {
+    vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+    mockFetch(routes())
+    renderWithProviders(<WeatherScreen />)
+    expect(await screen.findByText('Sin conexión. Mostrando los últimos datos guardados.')).toBeInTheDocument()
   })
 })

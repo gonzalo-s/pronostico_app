@@ -28,7 +28,7 @@ npm run build && npm start   # el service worker solo se registra en producción
 - `app/api/smn/[...path]`: proxy con lista blanca (`lib/proxyAllowlist.ts`). Una línea por ruta nueva.
 - `lib/schemas.ts`: contrato con la API (zod). Cada respuesta se valida; si no cumple, la UI muestra "Respuesta inesperada de la API".
 - `features/weather`: pantalla v1. Funciones futuras (`history`, `geolocation`, `stations-search`) entran como `features/<nombre>` con su ruta y una entrada en `lib/navigation.ts` (con 2 o más pestañas aparece la barra inferior).
-- `public/sw.js`: service worker (shell y últimas respuestas, network-first).
+- `public/sw.js`: service worker: `/api/smn/*` y las navegaciones son network-first (caché solo si falla la petición); `/_next/static/*` y `/icons/*` son cache-first.
 
 ## Contrato con la API
 
@@ -49,4 +49,4 @@ Crear un proyecto apuntando a este repo y definir `SMN_API_URL` y `SMN_API_KEY` 
 - El proxy es público (sin autenticación de usuario): cualquiera puede consultar las 3 rutas permitidas a través de él. Los datos son públicos (SMN), pero el consumo cuenta contra el rate limit de la API; si hace falta, agregar rate limiting al proxy.
 - `feels_like_c` (sensación) y la ventana de `precip_mm` por paso (1 h vs 3 h) no están documentados por el SMN; la UI no promete acumulados exactos.
 - Offline: se muestran las últimas respuestas guardadas por el service worker; sin una primera visita online no hay datos.
-- El service worker es mínimo: es network-first y solo recurre a la caché cuando la petición de red falla; las entradas de caché de `/icons/*` y de chunks antiguos de `/_next/static/*` no tienen versionado ni se limpian.
+- El service worker es mínimo: `/api/smn/*` y las navegaciones son network-first (solo recurren a la caché cuando la petición de red falla) y `/_next/static/*` e `/icons/*` son cache-first; las entradas de caché de `/icons/*` y de chunks antiguos de `/_next/static/*` no tienen versionado ni se limpian.

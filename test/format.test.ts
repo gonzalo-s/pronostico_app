@@ -65,7 +65,8 @@ describe('isStale', () => {
 describe('titleCase', () => {
   it('capitaliza cada palabra', () => {
     expect(titleCase('BUENOS AIRES AERO')).toBe('Buenos Aires Aero')
-    expect(titleCase('TIERRA DEL FUEGO')).toBe('Tierra Del Fuego')
-    expect(titleCase('SAN MIGUEL DE TUCUMÁN')).toBe('San Miguel De Tucumán')
+    expect(titleCase('TIERRA DEL FUEGO')).toBe('Tierra del Fuego')
+    expect(titleCase('DE LA PLATA')).toBe('De la Plata')
+    expect(titleCase('SAN MIGUEL DE TUCUMÁN')).toBe('San Miguel de Tucumán')
   })
 })

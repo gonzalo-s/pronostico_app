@@ -19,11 +19,11 @@ self.addEventListener('activate', (event) => {
   )
 })
 
-async function networkFirst(request, cacheName) {
+async function networkFirst(event, request, cacheName) {
   const cache = await caches.open(cacheName)
   try {
     const response = await fetch(request)
-    if (response.ok) cache.put(request, response.clone())
+    if (response.ok) event.waitUntil(cache.put(request, response.clone()).catch(() => {}))
     return response
   } catch (err) {
     const hit = await cache.match(request)
@@ -32,12 +32,12 @@ async function networkFirst(request, cacheName) {
   }
 }
 
-async function cacheFirst(request, cacheName) {
+async function cacheFirst(event, request, cacheName) {
   const cache = await caches.open(cacheName)
   const hit = await cache.match(request)
   if (hit) return hit
   const response = await fetch(request)
-  if (response.ok) cache.put(request, response.clone())
+  if (response.ok) event.waitUntil(cache.put(request, response.clone()).catch(() => {}))
   return response
 }
 
@@ -48,10 +48,10 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return
 
   if (url.pathname.startsWith('/api/smn/')) {
-    event.respondWith(networkFirst(request, DATA))
+    event.respondWith(networkFirst(event, request, DATA))
   } else if (request.mode === 'navigate') {
-    event.respondWith(networkFirst(request, SHELL))
+    event.respondWith(networkFirst(event, request, SHELL))
   } else if (url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/icons/')) {
-    event.respondWith(cacheFirst(request, SHELL))
+    event.respondWith(cacheFirst(event, request, SHELL))
   }
 })

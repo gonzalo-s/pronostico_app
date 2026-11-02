@@ -17,8 +17,10 @@ export function mockFetch(routes: Record<string, { status?: number; body: unknow
   return fn
 }
 
-export function renderWithProviders(ui: ReactElement) {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false, networkMode: 'always' } } })
+export function renderWithProviders(
+  ui: ReactElement,
+  client: QueryClient = new QueryClient({ defaultOptions: { queries: { retry: false, networkMode: 'always' } } }),
+) {
   return render(
     <QueryClientProvider client={client}>
       <StationProvider>{ui}</StationProvider>

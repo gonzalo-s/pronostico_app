@@ -19,7 +19,11 @@ function renderQuery<T>(q: UseQueryResult<T, Error>, height: number, render: (da
   if (q.data !== undefined) {
     return (
       <>
-        {q.isError && <Banner tone="warn">{errorMessage(q.error)}. Mostrando los últimos datos guardados.</Banner>}
+        {q.isError && (
+          <Banner tone="warn" onRetry={() => void q.refetch()}>
+            {errorMessage(q.error)}. Mostrando los últimos datos guardados.
+          </Banner>
+        )}
         {render(q.data)}
       </>
     )
@@ -48,6 +52,7 @@ export function WeatherScreen() {
   const currentQ = useCurrent(activeId)
   const forecastQ = useForecast(activeId)
 
+  const hasData = Boolean(currentQ.data || forecastQ.data)
   const now = new Date()
   const updatedAt = forecastQ.data?.meta.updated_at ?? currentQ.data?.meta.updated_at ?? null
 
@@ -67,7 +72,11 @@ export function WeatherScreen() {
         </button>
       </header>
 
-      {!online && <Banner tone="warn">Sin conexión: se muestran los últimos datos guardados.</Banner>}
+      {!online && (
+        <Banner tone="warn">
+          {hasData ? 'Sin conexión. Mostrando los últimos datos guardados.' : 'Sin conexión.'}
+        </Banner>
+      )}
 
       {!stations && stationsQ.isError && (
         <Banner tone="error" onRetry={() => void stationsQ.refetch()}>
