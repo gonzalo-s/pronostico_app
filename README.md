@@ -23,6 +23,27 @@ npm run typecheck
 npm run build && npm start   # el service worker solo se registra en producción
 ```
 
+## Pruebas en el navegador (agent-browser)
+
+`agent-browser` (devDependency) maneja un Chrome real para pruebas manuales o guiadas por un agente. Una sola vez: `npx agent-browser install` (descarga Chrome). Con `npm run dev` o `npm start` corriendo:
+
+```bash
+npx agent-browser open http://localhost:3000
+npx agent-browser set viewport 375 812  # viewport móvil de referencia
+npx agent-browser snapshot -i           # elementos interactivos con refs (@e1, ...)
+npx agent-browser screenshot mobile.png
+npx agent-browser close
+```
+
+También sirve contra el preview de `dev` o producción (pasar la URL de Vercel). Guía completa: `npx agent-browser skills get core`. No guardar capturas con datos sensibles en el repo.
+
+## Flujo dev → prod
+
+- `main` es producción (Vercel, URL fija). `dev` es el preview con URL estable. Ambos usan la misma API.
+- Se trabaja en `dev` (local con `npm run dev`); cada push a `dev` genera un preview.
+- Con el preview ok (tests, `npm run typecheck`, revisión en viewport móvil), PR `dev` → `main`; al mergear, Vercel despliega producción.
+- No se pushea directo a `main`.
+
 ## Estructura
 
 - `app/api/smn/[...path]`: proxy con lista blanca (`lib/proxyAllowlist.ts`). Una línea por ruta nueva.
@@ -42,7 +63,7 @@ Revisar el diff de `test/fixtures` antes de commitear. Si un test de contrato fa
 
 ## Despliegue (Vercel)
 
-Crear un proyecto apuntando a este repo y definir `SMN_API_URL` y `SMN_API_KEY` en las variables de entorno del proyecto (solo servidor).
+Crear un proyecto en Vercel apuntando a este repo, con `main` como rama de producción. Definir `SMN_API_URL` y `SMN_API_KEY` en las variables de entorno para **Production** y **Preview** (solo servidor, nunca `NEXT_PUBLIC_`). Asignar un dominio estable a la rama `dev` en Settings → Domains.
 
 ## Limitaciones conocidas
 
