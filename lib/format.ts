@@ -56,6 +56,16 @@ export function windText(dir: string | null, kmh: number | null, variable = fals
   return [prefix, `${kmh} km/h`].filter(Boolean).join(' ')
 }
 
+const WIND_DEGREES: Record<string, number> = {
+  norte: 0, noreste: 45, este: 90, sudeste: 135, sur: 180, sudoeste: 225, oeste: 270, noroeste: 315,
+}
+
+// El SMN informa el viento actual con el nombre de 8 puntos ("Sudeste"); devuelve los grados de origen
+export function windDegrees(dir: string | null): number | null {
+  const t = dir?.trim().toLowerCase()
+  return t !== undefined && t in WIND_DEGREES ? WIND_DEGREES[t] : null
+}
+
 export function isSoutheast(dir: string | null): boolean {
   const t = dir?.trim().toLowerCase()
   return t === 'sudeste' || t === 'se'

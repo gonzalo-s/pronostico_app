@@ -30,11 +30,11 @@ describe('CurrentCard', () => {
   })
   it('muestra un ícono decorativo según el cielo', () => {
     const { container } = render(<CurrentCard current={makeCurrent({ sky: 'Despejado' })} />)
-    expect(container.querySelector('svg[aria-hidden="true"]')).not.toBeNull()
+    expect(container.querySelector('.current__icon[aria-hidden="true"]')).not.toBeNull()
   })
   it('sin dato de cielo no muestra ícono', () => {
     const { container } = render(<CurrentCard current={makeCurrent({ sky: null })} />)
-    expect(container.querySelector('svg')).toBeNull()
+    expect(container.querySelector('.current__icon')).toBeNull()
   })
 })
 

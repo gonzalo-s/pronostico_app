@@ -19,7 +19,7 @@ function StepList({ id, steps }: { id: string; steps: ForecastStep[] }) {
         <li key={s.at} className="step">
           <span>{formatTime(s.at)}</span>
           <span>{formatTemp(s.temp_c)}</span>
-          <Wind dir={compass(s.wind_dir_deg)} kmh={s.wind_kmh} />
+          <Wind dir={compass(s.wind_dir_deg)} deg={s.wind_dir_deg} kmh={s.wind_kmh} />
           <span>{s.precip_mm === null ? EMPTY : formatValue(s.precip_mm, 'mm', 1)}</span>
         </li>
       ))}

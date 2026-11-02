@@ -15,6 +15,7 @@ button { font: inherit; color: inherit; }
 .app { max-width: 480px; margin: 0 auto; display: grid; gap: 16px;
   padding: max(16px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); }
 .muted { color: var(--muted); font-size: 0.875rem; }
+.wind__arrow { width: 1em; height: 1em; margin-right: 4px; vertical-align: -0.15em; }
 .wind--se { color: var(--wind-se); font-weight: 600; }
 
 .header { display: flex; }
