@@ -35,13 +35,13 @@ npx agent-browser screenshot mobile.png
 npx agent-browser close
 ```
 
-También sirve contra el preview de `dev` o producción (pasar la URL de Vercel). Guía completa: `npx agent-browser skills get core`. No guardar capturas con datos sensibles en el repo.
+También sirve contra producción (pasar la URL del dominio). Guía completa: `npx agent-browser skills get core`. No guardar capturas con datos sensibles en el repo.
 
 ## Flujo dev → prod
 
-- `main` es producción (Vercel, URL fija). `dev` es el preview con URL estable. Ambos usan la misma API.
-- Se trabaja en `dev` (local con `npm run dev`); cada push a `dev` genera un preview.
-- Con el preview ok (tests, `npm run typecheck`, revisión en viewport móvil), PR `dev` → `main`; al mergear, Vercel despliega producción.
+- `main` es producción (Vercel, con el dominio de producción). `dev` es solo de trabajo local: se prueba con `npm run dev`, sin dominio propio. Ambos usan la misma API.
+- Se trabaja en `dev` y se prueba en local.
+- Con todo ok en local (`npm test`, `npm run typecheck`, revisión en viewport móvil), PR `dev` → `main`; al mergear, Vercel despliega producción.
 - No se pushea directo a `main`.
 
 ## Estructura
@@ -63,7 +63,7 @@ Revisar el diff de `test/fixtures` antes de commitear. Si un test de contrato fa
 
 ## Despliegue (Vercel)
 
-Crear un proyecto en Vercel apuntando a este repo, con `main` como rama de producción. Definir `SMN_API_URL` y `SMN_API_KEY` en las variables de entorno para **Production** y **Preview** (solo servidor, nunca `NEXT_PUBLIC_`). Asignar un dominio estable a la rama `dev` en Settings → Domains.
+Crear un proyecto en Vercel apuntando a este repo, con `main` como rama de producción y el dominio de producción asignado. Definir `SMN_API_URL` y `SMN_API_KEY` en las variables de entorno de **Production** (solo servidor, nunca `NEXT_PUBLIC_`). Opcional: desactivar los previews de ramas distintas de `main` en Settings → Git, ya que `dev` se prueba en local.
 
 ## Limitaciones conocidas
 
