@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
-import { currentResponse, forecastResponse, stationsResponse } from '../lib/schemas'
+import { currentResponse, forecastResponse, nearestStationResponse, stationsResponse } from '../lib/schemas'
 import { pickDefaultStation } from '../lib/stations'
 
 const base = process.env.SMN_API_URL
@@ -22,6 +22,9 @@ async function main() {
   if (!station) throw new Error('La API no devolvió estaciones')
   const current = currentResponse.parse(await get(`stations/${station.id}/current`))
   const forecast = forecastResponse.parse(await get(`stations/${station.id}/forecast`))
+  const nearest = nearestStationResponse.parse(
+    await get(`stations/nearest?lat=${station.lat.toFixed(2)}&lon=${station.lon.toFixed(2)}`),
+  )
 
   const subset = [station, ...stations.data.filter((s) => s.id !== station.id)].slice(0, 10)
   const dir = path.join(process.cwd(), 'test', 'fixtures')
@@ -31,6 +34,7 @@ async function main() {
   write('stations.json', { data: subset, meta: stations.meta })
   write('current.json', current)
   write('forecast.json', forecast)
+  write('nearest.json', nearest)
   console.log(`Fixtures actualizados para "${station.name}" (id ${station.id}): ${subset.length} estaciones, ${forecast.data.steps.length} pasos.`)
 }
 

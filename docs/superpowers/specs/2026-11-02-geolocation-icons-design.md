@@ -40,11 +40,11 @@ Segunda iteración sobre la v1 (ver `2026-11-02-pronostico-app-design.md`). Tres
 6. cubierto → nublado total
 7. nublado → nublado (si empieza con "algo" o "parcialmente", nube con sol o luna)
 8. despejado → sol o luna
-9. Cualquier otro texto → ícono neutro (nube con interrogación). Nunca se rompe la UI por un valor nuevo.
+9. Cualquier otro texto → ícono neutro (`WiNa`). Nunca se rompe la UI por un valor nuevo.
 
 **Día o noche.** `isDay` se calcula con la hora de `observed_at` en `America/Argentina/Buenos_Aires` (UTC-3): día entre las 7 y las 19 h. Es una aproximación deliberada (sin cálculo astronómico). Solo cambia el ícono (sol o luna).
 
-**Dónde.** `CurrentCard` muestra el ícono grande junto a la temperatura, con `aria-label` igual al texto de `sky`. El pronóstico no trae campo de cielo, así que **no se inventa sol ni nubes**: cada día muestra un ícono de gota con los mm solo cuando `precip_mm_total > 0`, y nada si es 0.
+**Dónde.** `CurrentCard` muestra el ícono grande junto a la temperatura, decorativo (`aria-hidden`), porque el texto de `sky` ya se muestra al lado. El pronóstico no trae campo de cielo, así que **no se inventa sol ni nubes**: cada día muestra un ícono de gota con los mm solo cuando `precip_mm_total > 0`, y nada si es 0.
 
 ## 3. Viento del sudeste en rojo
 
@@ -55,7 +55,7 @@ Segunda iteración sobre la v1 (ver `2026-11-02-pronostico-app-design.md`). Tres
 - Pronóstico: `compass(wind_dir_deg)` ya devuelve "SE" para 112,5°–157,5°. Se muestra "SE 14 km/h" en rojo.
 - Viento variable o sin dirección: nunca rojo.
 
-**Código.** `windText` (string) se mantiene para no romper usos y tests. Se agrega el componente `features/weather/Wind.tsx` que recibe `dir`, `kmh` y `variable`, y renderiza `<span>`s; aplica la clase `wind-se` cuando `isSoutheast(dir)`. La clase usa un rojo con contraste AA sobre el fondo en claro y en oscuro (se define como variable CSS en `globals.css`, igual que el resto de la paleta). `CurrentCard` y `ForecastDays` usan `Wind`.
+**Código.** `windText` (string) se mantiene para no romper usos y tests. Se agrega el componente `features/weather/Wind.tsx` que recibe `dir`, `kmh` y `variable`, y renderiza un único `<span class="wind">` con el mismo texto que `windText` y le suma la clase `wind--se` cuando `isSoutheast(dir)`. La clase usa un rojo con contraste AA sobre el fondo en claro y en oscuro (se define como variable CSS en `globals.css`, igual que el resto de la paleta). `CurrentCard` y `ForecastDays` usan `Wind`.
 
 ## Tests
 

@@ -75,14 +75,13 @@ Crear un proyecto en Vercel apuntando a este repo, con `main` como rama de produ
 
 ## Estado y próximos pasos
 
-**Estado:** v1 completa y mergeada en `main`; 100 tests, `typecheck` y `build` ok; verificada en local contra la API real. Repo: `gonzalo-s/pronostico_app` (público; nunca commitear claves). Falta publicar en Vercel.
+**Estado:** v1 publicada en Vercel (`https://pronostico-sml.vercel.app/`) y verificada contra la API real. En `dev`: íconos del clima, viento del sudeste en rojo y botón "Usar mi ubicación" (`/stations/nearest`); 181 tests, `typecheck` ok. Repo: `gonzalo-s/pronostico_app` (público; nunca commitear claves).
 
 **Pendiente, en orden:**
 
-1. Vercel: importar el repo (producción = `main`), asignar el dominio de producción, cargar `SMN_API_URL` (sin barra final) y `SMN_API_KEY` en Production. Después de cargar las variables hay que redeployar: Vercel no las aplica a builds ya hechos. `NODE_ENV` lo pone Vercel; no cargarlo.
-2. Verificar producción: abrir el dominio, comprobar que `/api/smn/stations` responde 200 y revisar en viewport móvil (375×812).
-3. Refrescar fixtures con la API real (`npm run refresh-fixtures`, ver arriba): los actuales son valores ilustrativos escritos a mano. Los `*-nulls` son manuales y el script no los toca.
-4. Siguiente funcionalidad (a elegir): geolocalización con `/stations/nearest`, pantalla de histórico, búsqueda/favoritas.
+1. Merge de `dev` a `main` (dispara el deploy a producción) y probar en el celular: íconos, viento SE en rojo y el botón de ubicación (el permiso se pide solo al tocarlo).
+2. Generar `test/fixtures/nearest.json` con la API real (`npm run refresh-fixtures`; en PowerShell: `$env:SMN_API_URL = '...'` y `$env:SMN_API_KEY = '...'` antes) y sumar un test de contrato en `test/api.test.ts` que lo valide con `nearestStationResponse`. Los fixtures `*-nulls` son manuales y el script no los toca.
+3. Siguiente funcionalidad (a elegir): pantalla de histórico, búsqueda/favoritas.
 
 **Mejoras menores identificadas (no bloqueantes):**
 
