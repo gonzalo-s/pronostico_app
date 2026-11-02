@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { ApiError, getCurrent, getForecast, getNearestStation, getStations, shouldRetry } from '@/lib/api'
+import { ApiError, getCurrent, getForecast, getHistory, getNearestStation, getStations, shouldRetry } from '@/lib/api'
 import current from './fixtures/current.json'
 import forecast from './fixtures/forecast.json'
 import stations from './fixtures/stations.json'
@@ -30,6 +30,18 @@ describe('cliente de la API', () => {
     expect(res.data.id).toBe(7)
     expect(res.data.distance_km).toBe(3.2)
     expect(fetchMock).toHaveBeenCalledWith('/api/smn/stations/nearest?lat=-34.6&lon=-58.38')
+  })
+
+  it('getHistory pide el período y valida los puntos', async () => {
+    const body = {
+      data: [{ at: '2026-11-02T15:00:00.000Z', temp_c: 21.5, humidity_pct: 60, pressure_hpa: 1010, wind_dir_deg: 135, wind_kmh: 12 }],
+      meta: { source: 'SMN', updated_at: '2026-11-02T15:00:00.000Z' },
+    }
+    const fetchMock = mockFetch({ [`stations/${ID}/history?range=7d`]: { body } })
+    const res = await getHistory(ID, '7d')
+    expect(res.data).toHaveLength(1)
+    expect(res.data[0].temp_c).toBe(21.5)
+    expect(fetchMock).toHaveBeenCalledWith(`/api/smn/stations/${ID}/history?range=7d`)
   })
 
   it('404 → not_found', async () => {

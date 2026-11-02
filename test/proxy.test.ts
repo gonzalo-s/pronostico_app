@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { GET } from '@/app/api/smn/[...path]/route'
-import { isAllowedPath, nearestQuery } from '@/lib/proxyAllowlist'
+import { historyQuery, isAllowedPath, nearestQuery } from '@/lib/proxyAllowlist'
 
 const call = (path: string[]) =>
   GET(new Request(`http://localhost/api/smn/${path.join('/')}?x=1`), { params: Promise.resolve({ path }) })
@@ -19,12 +19,12 @@ afterEach(() => {
 })
 
 describe('isAllowedPath', () => {
-  it.each(['stations', 'stations/nearest', 'stations/5/current', 'stations/123/forecast'])('permite %s', (p) => {
+  it.each(['stations', 'stations/nearest', 'stations/5/current', 'stations/123/forecast', 'stations/5/history'])('permite %s', (p) => {
     expect(isAllowedPath(p)).toBe(true)
   })
   it.each([
     'health', 'internal/ingest', 'stations/abc/current', 'stations/0/current', 'stations/-1/current',
-    'stations/1/history', 'stations/nearest/extra', 'stations/Nearest', 'stations/1/current/extra', '../stations', '', 'stations/',
+    'stations/0/history', 'stations/5/history/extra', 'stations/abc/history', 'stations/nearest/extra', 'stations/Nearest', 'stations/1/current/extra', '../stations', '', 'stations/',
     'stations/05/current', 'stations/12345678901/current', 'Stations', 'stations/5/CURRENT',
     'stations//5/current', 'stations\n',
   ])('rechaza %s', (p) => {
@@ -142,5 +142,54 @@ describe('GET stations/nearest', () => {
     expect(res.status).toBe(400)
     expect(fetchMock).not.toHaveBeenCalled()
     expect(await res.json()).toEqual({ error: { code: 'bad_request', message: 'Coordenadas inválidas' } })
+  })
+})
+
+describe('historyQuery', () => {
+  const NOW = Date.parse('2026-11-02T18:47:12.345Z')
+  const q = (s: string) => historyQuery(new URLSearchParams(s), NOW)
+  it('calcula from/to con la hora redondeada hacia abajo', () => {
+    const to = encodeURIComponent('2026-11-02T18:00:00.000Z')
+    expect(q('range=24h')).toBe(`from=${encodeURIComponent('2026-11-01T18:00:00.000Z')}&to=${to}`)
+    expect(q('range=7d')).toBe(`from=${encodeURIComponent('2026-10-26T18:00:00.000Z')}&to=${to}`)
+    expect(q('range=31d')).toBe(`from=${encodeURIComponent('2026-10-02T18:00:00.000Z')}&to=${to}`)
+  })
+  it('descarta otros parámetros (no hay fechas libres)', () => {
+    expect(q('range=24h&from=2020-01-01&to=2020-02-01')).toBe(q('range=24h'))
+  })
+  it.each(['', 'range=', 'range=1h', 'range=24H', 'range=constructor', 'range=__proto__', 'from=2026-01-01'])(
+    'rechaza %s',
+    (s) => {
+      expect(q(s)).toBeNull()
+    },
+  )
+})
+
+describe('GET stations/:id/history', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+  it('reenvía from/to calculados por el servidor, con X-API-Key', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-02T18:47:12.345Z'))
+    const fetchMock = vi.fn(async () => new Response('{"data":[]}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await callQ(['stations', '5', 'history'], 'range=7d&from=2000-01-01')
+    expect(res.status).toBe(200)
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit]
+    expect(url).toBe(
+      `https://api.test/v1/stations/5/history?from=${encodeURIComponent('2026-10-26T18:00:00.000Z')}&to=${encodeURIComponent('2026-11-02T18:00:00.000Z')}`,
+    )
+    expect((init.headers as Record<string, string>)['X-API-Key']).toBe('secret-test-key')
+  })
+  it('período inválido o ausente → 400 sin llamar al upstream', async () => {
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+    for (const query of ['range=99d', '']) {
+      const res = await callQ(['stations', '5', 'history'], query)
+      expect(res.status).toBe(400)
+      expect(await res.json()).toEqual({ error: { code: 'bad_request', message: 'Período inválido' } })
+    }
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 })

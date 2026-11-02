@@ -1,6 +1,9 @@
 import type { ZodType } from 'zod'
 import { roundCoord } from '@/lib/geolocation'
-import { currentResponse, forecastResponse, nearestStationResponse, stationsResponse } from '@/lib/schemas'
+import type { HistoryRange } from '@/lib/history'
+import {
+  currentResponse, forecastResponse, historyResponse, nearestStationResponse, stationsResponse,
+} from '@/lib/schemas'
 
 export type ApiErrorKind = 'not_found' | 'network' | 'upstream' | 'contract'
 
@@ -38,6 +41,8 @@ async function getJson<T>(route: string, schema: ZodType<T>): Promise<T> {
 export const getStations = () => getJson('stations', stationsResponse)
 export const getCurrent = (id: number) => getJson(`stations/${id}/current`, currentResponse)
 export const getForecast = (id: number) => getJson(`stations/${id}/forecast`, forecastResponse)
+export const getHistory = (id: number, range: HistoryRange) =>
+  getJson(`stations/${id}/history?range=${range}`, historyResponse)
 export const getNearestStation = (lat: number, lon: number) =>
   getJson(`stations/nearest?lat=${roundCoord(lat)}&lon=${roundCoord(lon)}`, nearestStationResponse)
 

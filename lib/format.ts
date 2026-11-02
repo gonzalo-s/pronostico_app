@@ -26,7 +26,10 @@ const dateTimeFmt = new Intl.DateTimeFormat('es-AR', {
 })
 const weekdayFmt = new Intl.DateTimeFormat('es-AR', { weekday: 'long', timeZone: TZ })
 
-export const formatTime = (iso: string): string => timeFmt.format(new Date(iso))
+const dayFmt = new Intl.DateTimeFormat('es-AR', { day: '2-digit', month: '2-digit', timeZone: TZ })
+
+export const formatShortDate = (iso: string): string => dayFmt.format(new Date(iso))
+export const formatTime =(iso: string): string => timeFmt.format(new Date(iso))
 export const formatDateTime = (iso: string): string => dateTimeFmt.format(new Date(iso))
 
 export function artDate(iso: string): string {

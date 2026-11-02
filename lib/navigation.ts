@@ -4,4 +4,7 @@ export interface Tab {
 }
 
 // Una entrada por pantalla. Con 2 o más, BottomNav aparece solo.
-export const TABS: readonly Tab[] = [{ href: '/', label: 'Clima' }]
+export const TABS: readonly Tab[] = [
+  { href: '/', label: 'Clima' },
+  { href: '/history', label: 'Histórico' },
+]

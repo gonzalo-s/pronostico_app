@@ -1,4 +1,4 @@
-import { isAllowedPath, nearestQuery } from '@/lib/proxyAllowlist'
+import { HISTORY_ROUTE, historyQuery, isAllowedPath, nearestQuery } from '@/lib/proxyAllowlist'
 
 const UPSTREAM_TIMEOUT_MS = 10_000
 const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' }
@@ -19,6 +19,10 @@ export async function GET(
   if (route === 'stations/nearest') {
     const q = nearestQuery(new URL(req.url).searchParams)
     if (q === null) return errorResponse(400, 'bad_request', 'Coordenadas inválidas')
+    query = `?${q}`
+  } else if (HISTORY_ROUTE.test(route)) {
+    const q = historyQuery(new URL(req.url).searchParams, Date.now())
+    if (q === null) return errorResponse(400, 'bad_request', 'Período inválido')
     query = `?${q}`
   }
 

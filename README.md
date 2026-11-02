@@ -75,13 +75,13 @@ Crear un proyecto en Vercel apuntando a este repo, con `main` como rama de produ
 
 ## Estado y próximos pasos
 
-**Estado:** v1 publicada en Vercel (`https://pronostico-sml.vercel.app/`) y verificada contra la API real. En `dev`: íconos del clima, viento del sudeste en rojo y botón "Usar mi ubicación" (`/stations/nearest`); 181 tests, `typecheck` ok. Repo: `gonzalo-s/pronostico_app` (público; nunca commitear claves).
+**Estado:** v1 publicada en Vercel (`https://pronostico-sml.vercel.app/`) y verificada contra la API real. Incluye íconos del clima, viento con flecha (norte arriba) y el sudeste en rojo, íconos de lluvia por cantidad, altitud y distancia de la estación, botón "Usar mi ubicación" (`/stations/nearest`) y pestaña Histórico (gráfico por período y métrica); 259 tests, `typecheck` y `build` ok. Repo: `gonzalo-s/pronostico_app` (público; nunca commitear claves).
 
 **Pendiente, en orden:**
 
-1. Merge de `dev` a `main` (dispara el deploy a producción) y probar en el celular: íconos, viento SE en rojo y el botón de ubicación (el permiso se pide solo al tocarlo).
-2. Generar `test/fixtures/nearest.json` con la API real (`npm run refresh-fixtures`; en PowerShell: `$env:SMN_API_URL = '...'` y `$env:SMN_API_KEY = '...'` antes) y sumar un test de contrato en `test/api.test.ts` que lo valide con `nearestStationResponse`. Los fixtures `*-nulls` son manuales y el script no los toca.
-3. Siguiente funcionalidad (a elegir): pantalla de histórico, búsqueda/favoritas.
+1. Probar en el celular: íconos, flecha y viento SE en rojo, el botón de ubicación (el permiso se pide solo al tocarlo) y la pestaña Histórico.
+2. Generar `test/fixtures/nearest.json` y uno de `history` con la API real (`npm run refresh-fixtures`; en PowerShell: `$env:SMN_API_URL = '...'` y `$env:SMN_API_KEY = '...'` antes) y sumar un test de contrato en `test/api.test.ts` que lo valide con `nearestStationResponse`. Los fixtures `*-nulls` son manuales y el script no los toca.
+3. Siguiente funcionalidad (a elegir): búsqueda/favoritas, estado de las fuentes (`/health`). El pronóstico no trae tormenta ni chubascos; esos íconos solo existen para el cielo actual.
 
 **Mejoras menores identificadas (no bloqueantes):**
 

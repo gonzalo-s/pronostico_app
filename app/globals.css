@@ -74,3 +74,13 @@ button { font: inherit; color: inherit; }
   background: var(--card); border-top: 1px solid var(--border); }
 .bottomnav a { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 16px; color: var(--muted); text-decoration: none; }
 .bottomnav a[aria-current='page'] { color: var(--accent); font-weight: 600; }
+
+.segmented { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 8px; }
+.segmented button { flex: 1; min-height: 44px; padding: 8px 6px; border: 1px solid var(--border); border-radius: 10px; background: none; cursor: pointer; }
+.segmented button[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--card); font-weight: 600; }
+.chart { display: block; width: 100%; height: auto; margin-top: 8px; }
+.chart__line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart__dot { fill: var(--accent); }
+.chart__axis { display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--muted); font-size: 0.75rem; }
+.stats--three { grid-template-columns: repeat(3, 1fr); }
+.station-distance { margin: -8px 0 0; }

@@ -6,14 +6,12 @@ import { Banner } from '@/components/ui/Banner'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { ApiError } from '@/lib/api'
 import { formatDateTime, isStale, todayArt } from '@/lib/format'
-import { pickDefaultStation } from '@/lib/stations'
 import { useOnline } from '@/lib/useOnline'
-import { useStation } from '@/lib/useStation'
 import { CurrentCard } from './CurrentCard'
 import { ForecastDays } from './ForecastDays'
 import { StationBar } from './StationBar'
 import { errorMessage } from './errorMessage'
-import { useCurrent, useForecast, useStations } from './hooks'
+import { useActiveStation, useCurrent, useForecast } from './hooks'
 
 function renderQuery<T>(q: UseQueryResult<T, Error>, height: number, render: (data: T) => ReactNode): ReactNode {
   if (q.data !== undefined) {
@@ -40,13 +38,8 @@ function renderQuery<T>(q: UseQueryResult<T, Error>, height: number, render: (da
 }
 
 export function WeatherScreen() {
-  const { stationId, hydrated } = useStation()
   const online = useOnline()
-
-  const stationsQ = useStations()
-  const stations = stationsQ.data?.data
-  const station = stations ? (stations.find((s) => s.id === stationId) ?? pickDefaultStation(stations)) : undefined
-  const activeId = hydrated && station ? station.id : null
+  const { stationsQ, stations, station, activeId } = useActiveStation()
 
   const currentQ = useCurrent(activeId)
   const forecastQ = useForecast(activeId)
