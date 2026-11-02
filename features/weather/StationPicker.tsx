@@ -2,8 +2,11 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { BottomSheet } from '@/components/ui/BottomSheet'
+import { getNearestStation } from '@/lib/api'
 import { titleCase } from '@/lib/format'
+import { geolocationSupported, getPosition } from '@/lib/geolocation'
 import type { Station } from '@/lib/schemas'
+import { geoErrorMessage } from './errorMessage'
 
 interface Props {
   open: boolean
@@ -17,9 +20,29 @@ const normalize = (t: string) => t.normalize('NFD').replace(/\p{Diacritic}/gu, '
 
 export function StationPicker({ open, stations, selectedId, onSelect, onClose }: Props) {
   const [query, setQuery] = useState('')
+  const [locating, setLocating] = useState(false)
+  const [locateError, setLocateError] = useState<string | null>(null)
   useEffect(() => {
-    if (!open) setQuery('')
+    if (!open) {
+      setQuery('')
+      setLocateError(null)
+    }
   }, [open])
+
+  async function locate() {
+    setLocating(true)
+    setLocateError(null)
+    try {
+      const { lat, lon } = await getPosition()
+      const nearest = await getNearestStation(lat, lon)
+      onSelect(nearest.data.id)
+      onClose()
+    } catch (err) {
+      setLocateError(geoErrorMessage(err))
+    } finally {
+      setLocating(false)
+    }
+  }
 
   const filtered = useMemo(() => {
     const q = normalize(query.trim())
@@ -28,6 +51,12 @@ export function StationPicker({ open, stations, selectedId, onSelect, onClose }:
 
   return (
     <BottomSheet open={open} title="Elegir estación" onClose={onClose}>
+      {geolocationSupported() && (
+        <button type="button" className="locate" onClick={() => void locate()} disabled={locating}>
+          {locating ? 'Buscando…' : 'Usar mi ubicación'}
+        </button>
+      )}
+      {locateError && <p role="alert" className="muted locate__error">{locateError}</p>}
       <input
         type="search"
         className="search"
