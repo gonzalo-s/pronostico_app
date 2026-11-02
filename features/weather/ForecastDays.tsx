@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { WiRaindrop } from 'react-icons/wi'
 import { EMPTY, artDate, compass, formatDayLabel, formatTemp, formatTime, formatValue } from '@/lib/format'
+import { rainIcon, rainLevel, type RainLevel } from '@/lib/rain'
 import type { ForecastDay, ForecastStep } from '@/lib/schemas'
 import { Wind } from './Wind'
 
@@ -10,6 +10,12 @@ interface Props {
   days: ForecastDay[]
   steps: ForecastStep[]
   today: string
+}
+
+function RainIcon({ level }: { level: RainLevel | null }) {
+  if (level === null) return null
+  const { Icon, label } = rainIcon(level)
+  return <Icon className="rain__icon" role="img" aria-label={label} />
 }
 
 function StepList({ id, steps }: { id: string; steps: ForecastStep[] }) {
@@ -20,7 +26,10 @@ function StepList({ id, steps }: { id: string; steps: ForecastStep[] }) {
           <span>{formatTime(s.at)}</span>
           <span>{formatTemp(s.temp_c)}</span>
           <Wind dir={compass(s.wind_dir_deg)} deg={s.wind_dir_deg} kmh={s.wind_kmh} />
-          <span>{s.precip_mm === null ? EMPTY : formatValue(s.precip_mm, 'mm', 1)}</span>
+          <span>
+            <RainIcon level={rainLevel(s.precip_mm, 'step')} />
+            {s.precip_mm === null ? EMPTY : formatValue(s.precip_mm, 'mm', 1)}
+          </span>
         </li>
       ))}
     </ul>
@@ -49,7 +58,7 @@ export function ForecastDays({ days, steps, today }: Props) {
                 <span className="day__rain">
                   {day.precip_mm_total > 0 ? (
                     <>
-                      <WiRaindrop className="day__icon" aria-hidden="true" />
+                      <RainIcon level={rainLevel(day.precip_mm_total, 'day')} />
                       {`Lluvia prevista ${formatValue(day.precip_mm_total, 'mm', 1)}`}
                     </>
                   ) : (
