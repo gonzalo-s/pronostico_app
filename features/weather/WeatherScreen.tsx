@@ -85,7 +85,10 @@ export function WeatherScreen() {
             </>
           ))}
           {renderQuery(forecastQ, 260, (data) => (
-            <ForecastDays days={data.data.days} steps={data.data.steps} today={todayArt(now)} />
+            <>
+              {isStale(data.meta.updated_at, now) && <Banner tone="warn">Datos desactualizados</Banner>}
+              <ForecastDays days={data.data.days} steps={data.data.steps} today={todayArt(now)} />
+            </>
           ))}
         </>
       )}

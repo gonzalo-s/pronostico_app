@@ -42,7 +42,7 @@ button { font: inherit; color: inherit; }
 .banner { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; }
 .banner--warn { background: var(--warn); color: var(--warn-fg); }
 .banner--error { background: var(--err); color: var(--err-fg); }
-.banner button { min-height: 36px; padding: 4px 12px; border-radius: 8px; border: 1px solid currentColor; background: none; cursor: pointer; }
+.banner button { min-height: 44px; padding: 4px 12px; border-radius: 8px; border: 1px solid currentColor; background: none; cursor: pointer; }
 .skeleton { border-radius: 16px; background: linear-gradient(90deg, var(--border), var(--card), var(--border)); background-size: 200% 100%;
   animation: shimmer 1.4s infinite linear; }
 @keyframes shimmer { to { background-position: -200% 0; } }
@@ -62,5 +62,5 @@ button { font: inherit; color: inherit; }
 
 .bottomnav { position: sticky; bottom: 0; display: flex; justify-content: space-around; padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
   background: var(--card); border-top: 1px solid var(--border); }
-.bottomnav a { padding: 8px 16px; color: var(--muted); text-decoration: none; }
+.bottomnav a { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 16px; color: var(--muted); text-decoration: none; }
 .bottomnav a[aria-current='page'] { color: var(--accent); font-weight: 600; }

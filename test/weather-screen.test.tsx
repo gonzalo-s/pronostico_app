@@ -62,18 +62,52 @@ describe('WeatherScreen', () => {
     expect(await screen.findByText('Datos desactualizados')).toBeInTheDocument()
   })
 
+  it('datos frescos → sin aviso de desactualizados', async () => {
+    const fresh = new Date().toISOString()
+    mockFetch(
+      routes({
+        [`stations/${defaultStation.id}/current`]: { body: { ...current, meta: { ...current.meta, updated_at: fresh } } },
+        [`stations/${defaultStation.id}/forecast`]: { body: { ...forecast, meta: { ...forecast.meta, updated_at: fresh } } },
+      }),
+    )
+    renderWithProviders(<WeatherScreen />)
+    expect(await screen.findByText('Próximos días')).toBeInTheDocument()
+    expect(await screen.findByText('Ahora')).toBeInTheDocument()
+    expect(screen.queryByText('Datos desactualizados')).toBeNull()
+  })
+
+  it('solo el pronóstico viejo → aviso de desactualizados', async () => {
+    const fresh = new Date().toISOString()
+    mockFetch(
+      routes({
+        [`stations/${defaultStation.id}/current`]: { body: { ...current, meta: { ...current.meta, updated_at: fresh } } },
+        [`stations/${defaultStation.id}/forecast`]: { body: { ...forecast, meta: { ...forecast.meta, updated_at: '2020-01-01T00:00:00.000Z' } } },
+      }),
+    )
+    renderWithProviders(<WeatherScreen />)
+    expect(await screen.findByText('Datos desactualizados')).toBeInTheDocument()
+    expect(await screen.findByText('Próximos días')).toBeInTheDocument()
+    expect(await screen.findByText('Ahora')).toBeInTheDocument()
+  })
+
   it('respuesta fuera de contrato → "Respuesta inesperada de la API"', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
     mockFetch(routes({ [`stations/${defaultStation.id}/forecast`]: { body: { data: {}, meta: {} } } }))
     renderWithProviders(<WeatherScreen />)
     expect(await screen.findByText('Respuesta inesperada de la API')).toBeInTheDocument()
+    expect(screen.queryByText('Próximos días')).not.toBeInTheDocument()
   })
 
   it('error de servicio: banner con Reintentar', async () => {
     mockFetch(routes({ [`stations/${defaultStation.id}/current`]: { status: 502, body: {} } }))
     renderWithProviders(<WeatherScreen />)
     expect(await screen.findByText('No se pudieron cargar los datos')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Reintentar' })).toBeInTheDocument()
+    const retry = screen.getByRole('button', { name: 'Reintentar' })
+    const second = mockFetch(routes())
+    await userEvent.click(retry)
+    await waitFor(() => expect(second).toHaveBeenCalledWith(`/api/smn/stations/${defaultStation.id}/current`))
+    expect(await screen.findByText('Ahora')).toBeInTheDocument()
+    expect(screen.queryByText('No se pudieron cargar los datos')).toBeNull()
   })
 
   it('cambiar de estación pide sus datos y la recuerda', async () => {
@@ -89,5 +123,6 @@ describe('WeatherScreen', () => {
     await userEvent.click(option)
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/api/smn/stations/${other.id}/current`))
     expect(localStorage.getItem('pronostico:stationId')).toBe(String(other.id))
+    expect(await headerName(other.name)).toBeInTheDocument()
   })
 })
