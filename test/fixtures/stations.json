@@ -1,0 +1,8 @@
+{
+  "data": [
+    { "id": 1, "name": "BUENOS AIRES", "province": "CAPITAL FEDERAL", "lat": -34.58, "lon": -58.48, "altitude_m": 25 },
+    { "id": 2, "name": "CORDOBA AERO", "province": "CORDOBA", "lat": -31.32, "lon": -64.21, "altitude_m": 474 },
+    { "id": 3, "name": "USHUAIA AERO", "province": "TIERRA DEL FUEGO", "lat": -54.84, "lon": -68.31, "altitude_m": null }
+  ],
+  "meta": { "source": "SMN", "updated_at": null }
+}
