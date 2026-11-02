@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import { Providers } from '@/components/Providers'
+import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
 import { BottomNav } from '@/components/ui/BottomNav'
 import './globals.css'
 
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   description: 'Clima actual y pronóstico a 5 días con datos abiertos del Servicio Meteorológico Nacional.',
   applicationName: 'Pronóstico SMN',
   appleWebApp: { capable: true, title: 'Pronóstico', statusBarStyle: 'default' },
+  icons: { apple: '/icons/apple-touch-icon.png' },
 }
 
 export const viewport: Viewport = {
@@ -26,6 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main className="app">{children}</main>
           <BottomNav />
         </Providers>
+        <ServiceWorkerRegister />
       </body>
     </html>
   )
