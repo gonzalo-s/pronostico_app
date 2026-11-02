@@ -28,6 +28,14 @@ describe('CurrentCard', () => {
     expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(5)
     expect(container).not.toHaveTextContent(/null|NaN|undefined/)
   })
+  it('muestra un ícono decorativo según el cielo', () => {
+    const { container } = render(<CurrentCard current={makeCurrent({ sky: 'Despejado' })} />)
+    expect(container.querySelector('svg[aria-hidden="true"]')).not.toBeNull()
+  })
+  it('sin dato de cielo no muestra ícono', () => {
+    const { container } = render(<CurrentCard current={makeCurrent({ sky: null })} />)
+    expect(container.querySelector('svg')).toBeNull()
+  })
 })
 
 describe('ForecastDays', () => {
@@ -42,6 +50,11 @@ describe('ForecastDays', () => {
     expect(screen.getByRole('button', { name: /Hoy/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Mañana/ })).toHaveTextContent('Lluvia prevista 2,5 mm')
     expect(screen.getByRole('button', { name: /Hoy/ })).toHaveTextContent('Sin lluvia prevista')
+  })
+  it('muestra la gota solo cuando hay lluvia prevista', () => {
+    const { container } = render(<ForecastDays days={days} steps={steps} today="2026-11-02" />)
+    // days[0] sin lluvia, days[1] con 2,5 mm → una sola gota
+    expect(container.querySelectorAll('svg')).toHaveLength(1)
   })
   it('expande y colapsa los pasos de 3 h del día', async () => {
     render(<ForecastDays days={days} steps={steps} today="2026-11-02" />)

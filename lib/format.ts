@@ -29,6 +29,12 @@ export function artDate(iso: string): string {
 
 export const todayArt = (now: Date): string => artDate(now.toISOString())
 
+// Aproximación deliberada: día entre las 7 y las 19 h de Argentina, sin cálculo astronómico
+export function isDaytime(iso: string): boolean {
+  const hour = new Date(Date.parse(iso) - ART_OFFSET_MS).getUTCHours()
+  return hour >= 7 && hour < 19
+}
+
 export function formatDayLabel(date: string, today: string): string {
   if (date === today) return 'Hoy'
   const tomorrow = artDate(new Date(Date.parse(`${today}T12:00:00-03:00`) + DAY_MS).toISOString())

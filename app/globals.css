@@ -25,6 +25,9 @@ button { font: inherit; color: inherit; }
 .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
 .card__title { margin: 0 0 8px; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
 .current__temp { margin: 0; font-size: 4rem; font-weight: 300; line-height: 1; }
+.current__main { display: flex; align-items: center; justify-content: space-between; }
+.current__icon { width: 4.5rem; height: 4.5rem; color: var(--accent); }
+.day__icon { margin-right: 2px; font-size: 1.25rem; vertical-align: -0.25em; }
 .current__sky { margin: 4px 0 16px; font-size: 1.125rem; }
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 12px; }
 .stat dt { color: var(--muted); font-size: 0.8125rem; }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   EMPTY, artDate, compass, formatDateTime, formatDayLabel, formatTemp, formatTime,
-  formatValue, isStale, titleCase, todayArt, windText,
+  formatValue, isDaytime, isStale, titleCase, todayArt, windText,
 } from '@/lib/format'
 
 describe('formatValue / formatTemp', () => {
@@ -68,5 +68,17 @@ describe('titleCase', () => {
     expect(titleCase('TIERRA DEL FUEGO')).toBe('Tierra del Fuego')
     expect(titleCase('DE LA PLATA')).toBe('De la Plata')
     expect(titleCase('SAN MIGUEL DE TUCUMÁN')).toBe('San Miguel de Tucumán')
+  })
+})
+
+describe('isDaytime', () => {
+  it.each([
+    ['2026-11-02T10:00:00.000Z', true],  // 07:00 ART
+    ['2026-11-02T21:59:00.000Z', true],  // 18:59 ART
+    ['2026-11-02T22:00:00.000Z', false], // 19:00 ART
+    ['2026-11-02T09:59:00.000Z', false], // 06:59 ART
+    ['2026-11-02T03:00:00.000Z', false], // 00:00 ART
+  ])('%s → %s', (iso, expected) => {
+    expect(isDaytime(iso)).toBe(expected)
   })
 })

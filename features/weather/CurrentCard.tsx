@@ -1,5 +1,6 @@
-import { EMPTY, formatTemp, formatTime, formatValue, windText } from '@/lib/format'
+import { EMPTY, formatTemp, formatTime, formatValue, isDaytime, windText } from '@/lib/format'
 import type { Current } from '@/lib/schemas'
+import { skyIcon } from '@/lib/skyIcon'
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -11,10 +12,14 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 export function CurrentCard({ current }: { current: Current }) {
+  const Icon = skyIcon(current.sky, isDaytime(current.observed_at))
   return (
     <section className="card" aria-labelledby="current-title">
       <h2 id="current-title" className="card__title">Ahora</h2>
-      <p className="current__temp">{formatTemp(current.temp_c)}</p>
+      <div className="current__main">
+        <p className="current__temp">{formatTemp(current.temp_c)}</p>
+        {Icon && <Icon className="current__icon" aria-hidden="true" />}
+      </div>
       <p className="current__sky">{current.sky ?? EMPTY}</p>
       <dl className="stats">
         <Stat label="Sensación" value={formatTemp(current.feels_like_c)} />

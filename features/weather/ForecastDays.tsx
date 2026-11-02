@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { WiRaindrop } from 'react-icons/wi'
 import { EMPTY, artDate, compass, formatDayLabel, formatTemp, formatTime, formatValue, windText } from '@/lib/format'
 import type { ForecastDay, ForecastStep } from '@/lib/schemas'
 
@@ -45,9 +46,14 @@ export function ForecastDays({ days, steps, today }: Props) {
               >
                 <span className="day__label">{formatDayLabel(day.date, today)}</span>
                 <span className="day__rain">
-                  {day.precip_mm_total > 0
-                    ? `Lluvia prevista ${formatValue(day.precip_mm_total, 'mm', 1)}`
-                    : 'Sin lluvia prevista'}
+                  {day.precip_mm_total > 0 ? (
+                    <>
+                      <WiRaindrop className="day__icon" aria-hidden="true" />
+                      {`Lluvia prevista ${formatValue(day.precip_mm_total, 'mm', 1)}`}
+                    </>
+                  ) : (
+                    'Sin lluvia prevista'
+                  )}
                 </span>
                 <span className="day__range">
                   {formatTemp(day.temp_min_c)} / {formatTemp(day.temp_max_c)}
