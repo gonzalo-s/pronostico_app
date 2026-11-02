@@ -1,12 +1,12 @@
 :root {
   --bg: #f5f7fa; --fg: #14213d; --muted: #5b6b82; --card: #fff; --accent: #0b3d91; --border: #e1e6ee;
-  --warn: #fff4d6; --warn-fg: #6b4e00; --err: #fde8e8; --err-fg: #8a1c1c;
+  --warn: #fff4d6; --warn-fg: #6b4e00; --err: #fde8e8; --err-fg: #8a1c1c; --wind-se: #c62828;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0e1626; --fg: #e8eefc; --muted: #9fb0cc; --card: #16223a; --accent: #6ea8ff; --border: #25324d;
-    --warn: #3a2f10; --warn-fg: #ffd98a; --err: #3d1a1a; --err-fg: #ffb4b4;
+    --warn: #3a2f10; --warn-fg: #ffd98a; --err: #3d1a1a; --err-fg: #ffb4b4; --wind-se: #ff6b6b;
   }
 }
 * { box-sizing: border-box; }
@@ -15,6 +15,7 @@ button { font: inherit; color: inherit; }
 .app { max-width: 480px; margin: 0 auto; display: grid; gap: 16px;
   padding: max(16px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); }
 .muted { color: var(--muted); font-size: 0.875rem; }
+.wind--se { color: var(--wind-se); font-weight: 600; }
 
 .header { display: flex; }
 .station-btn { display: flex; align-items: baseline; gap: 8px; min-height: 44px; padding: 8px 12px; width: 100%;

@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { WiRaindrop } from 'react-icons/wi'
-import { EMPTY, artDate, compass, formatDayLabel, formatTemp, formatTime, formatValue, windText } from '@/lib/format'
+import { EMPTY, artDate, compass, formatDayLabel, formatTemp, formatTime, formatValue } from '@/lib/format'
 import type { ForecastDay, ForecastStep } from '@/lib/schemas'
+import { Wind } from './Wind'
 
 interface Props {
   days: ForecastDay[]
@@ -18,7 +19,7 @@ function StepList({ id, steps }: { id: string; steps: ForecastStep[] }) {
         <li key={s.at} className="step">
           <span>{formatTime(s.at)}</span>
           <span>{formatTemp(s.temp_c)}</span>
-          <span>{windText(compass(s.wind_dir_deg), s.wind_kmh)}</span>
+          <Wind dir={compass(s.wind_dir_deg)} kmh={s.wind_kmh} />
           <span>{s.precip_mm === null ? EMPTY : formatValue(s.precip_mm, 'mm', 1)}</span>
         </li>
       ))}

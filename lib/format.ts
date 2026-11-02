@@ -56,6 +56,11 @@ export function windText(dir: string | null, kmh: number | null, variable = fals
   return [prefix, `${kmh} km/h`].filter(Boolean).join(' ')
 }
 
+export function isSoutheast(dir: string | null): boolean {
+  const t = dir?.trim().toLowerCase()
+  return t === 'sudeste' || t === 'se'
+}
+
 export function isStale(updatedAt: string | null, now: Date, hours = 6): boolean {
   return updatedAt !== null && now.getTime() - Date.parse(updatedAt) > hours * 3600_000
 }
