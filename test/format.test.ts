@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   EMPTY, artDate, compass, formatDateTime, formatDayLabel, formatTemp, formatTime,
-  formatValue, isDaytime, isStale, titleCase, todayArt, windText,
+  formatAltitude, formatDistance, formatValue, isDaytime, isStale, titleCase, todayArt, windText,
 } from '@/lib/format'
 
 describe('formatValue / formatTemp', () => {
@@ -80,5 +80,19 @@ describe('isDaytime', () => {
     ['2026-11-02T03:00:00.000Z', false], // 00:00 ART
   ])('%s → %s', (iso, expected) => {
     expect(isDaytime(iso)).toBe(expected)
+  })
+})
+
+describe('formatAltitude / formatDistance', () => {
+  it('altitud', () => {
+    expect(formatAltitude(25)).toBe('25 m s. n. m.')
+    expect(formatAltitude(1.4)).toBe('1 m s. n. m.')
+    expect(formatAltitude(0)).toBe('0 m s. n. m.')
+    expect(formatAltitude(null)).toBeNull()
+  })
+  it('distancia', () => {
+    expect(formatDistance(3.24)).toBe('A 3,2 km de vos')
+    expect(formatDistance(45)).toBe('A 45,0 km de vos')
+    expect(formatDistance(0.4)).toBe('A menos de 1 km de vos')
   })
 })

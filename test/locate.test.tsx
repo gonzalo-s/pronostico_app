@@ -53,7 +53,7 @@ describe('StationPicker: usar mi ubicación', () => {
     mockFetch({ [NEAREST_ROUTE]: { body: nearestBody } })
     const props = setup()
     await userEvent.click(screen.getByRole('button', { name: 'Usar mi ubicación' }))
-    await vi.waitFor(() => expect(props.onSelect).toHaveBeenCalledWith(7))
+    await vi.waitFor(() => expect(props.onSelect).toHaveBeenCalledWith(7, 3.2))
     expect(props.onClose).toHaveBeenCalled()
   })
 

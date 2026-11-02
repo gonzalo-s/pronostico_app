@@ -6,7 +6,9 @@ const STORAGE_KEY = 'pronostico:stationId'
 
 interface StationContextValue {
   stationId: number | null
-  setStationId: (id: number) => void
+  setStationId: (id: number, distanceKm?: number) => void
+  /** Distancia a la estación elegida por ubicación; solo en memoria, se borra al elegir a mano */
+  distanceKm: number | null
   hydrated: boolean
 }
 
@@ -15,6 +17,7 @@ const StationContext = createContext<StationContextValue | null>(null)
 export function StationProvider({ children }: { children: ReactNode }) {
   const [stationId, setId] = useState<number | null>(null)
   const [hydrated, setHydrated] = useState(false)
+  const [distanceKm, setDistanceKm] = useState<number | null>(null)
 
   useEffect(() => {
     try {
@@ -26,8 +29,9 @@ export function StationProvider({ children }: { children: ReactNode }) {
     setHydrated(true)
   }, [])
 
-  const setStationId = useCallback((id: number) => {
+  const setStationId = useCallback((id: number, distance?: number) => {
     setId(id)
+    setDistanceKm(distance ?? null)
     try {
       localStorage.setItem(STORAGE_KEY, String(id))
     } catch {
@@ -35,7 +39,10 @@ export function StationProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const value = useMemo(() => ({ stationId, setStationId, hydrated }), [stationId, setStationId, hydrated])
+  const value = useMemo(
+    () => ({ stationId, setStationId, distanceKm, hydrated }),
+    [stationId, setStationId, distanceKm, hydrated],
+  )
   return <StationContext.Provider value={value}>{children}</StationContext.Provider>
 }
 

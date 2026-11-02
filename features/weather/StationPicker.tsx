@@ -12,7 +12,7 @@ interface Props {
   open: boolean
   stations: Station[]
   selectedId: number | null
-  onSelect: (id: number) => void
+  onSelect: (id: number, distanceKm?: number) => void
   onClose: () => void
 }
 
@@ -35,7 +35,7 @@ export function StationPicker({ open, stations, selectedId, onSelect, onClose }:
     try {
       const { lat, lon } = await getPosition()
       const nearest = await getNearestStation(lat, lon)
-      onSelect(nearest.data.id)
+      onSelect(nearest.data.id, nearest.data.distance_km)
       onClose()
     } catch (err) {
       setLocateError(geoErrorMessage(err))

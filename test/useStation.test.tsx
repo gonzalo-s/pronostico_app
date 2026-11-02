@@ -30,6 +30,16 @@ describe('useStation', () => {
     expect(result.current.stationId).toBe(7)
     expect(localStorage.getItem('pronostico:stationId')).toBe('7')
   })
+  it('distanceKm: arranca en null, la fija setStationId y una elección sin distancia la borra', async () => {
+    const { result } = setup()
+    await waitFor(() => expect(result.current.hydrated).toBe(true))
+    expect(result.current.distanceKm).toBeNull()
+    act(() => result.current.setStationId(7, 3.2))
+    expect(result.current.distanceKm).toBe(3.2)
+    act(() => result.current.setStationId(9))
+    expect(result.current.distanceKm).toBeNull()
+    expect(localStorage.getItem('pronostico:stationId')).toBe('9')
+  })
   it('lanza fuera del provider', () => {
     expect(() => renderHook(() => useStation())).toThrow()
   })

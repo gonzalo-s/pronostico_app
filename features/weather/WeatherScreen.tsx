@@ -1,17 +1,17 @@
 'use client'
 
 import type { UseQueryResult } from '@tanstack/react-query'
-import { useState, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Banner } from '@/components/ui/Banner'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { ApiError } from '@/lib/api'
-import { formatDateTime, isStale, titleCase, todayArt } from '@/lib/format'
+import { formatDateTime, isStale, todayArt } from '@/lib/format'
 import { pickDefaultStation } from '@/lib/stations'
 import { useOnline } from '@/lib/useOnline'
 import { useStation } from '@/lib/useStation'
 import { CurrentCard } from './CurrentCard'
 import { ForecastDays } from './ForecastDays'
-import { StationPicker } from './StationPicker'
+import { StationBar } from './StationBar'
 import { errorMessage } from './errorMessage'
 import { useCurrent, useForecast, useStations } from './hooks'
 
@@ -40,9 +40,8 @@ function renderQuery<T>(q: UseQueryResult<T, Error>, height: number, render: (da
 }
 
 export function WeatherScreen() {
-  const { stationId, setStationId, hydrated } = useStation()
+  const { stationId, hydrated } = useStation()
   const online = useOnline()
-  const [pickerOpen, setPickerOpen] = useState(false)
 
   const stationsQ = useStations()
   const stations = stationsQ.data?.data
@@ -58,19 +57,7 @@ export function WeatherScreen() {
 
   return (
     <>
-      <header className="header">
-        <button
-          type="button"
-          className="station-btn"
-          onClick={() => setPickerOpen(true)}
-          disabled={!stations}
-          aria-haspopup="dialog"
-        >
-          <span className="station-btn__name">{station ? titleCase(station.name) : 'Cargando…'}</span>
-          {station && <span className="muted">{titleCase(station.province)}</span>}
-          <span aria-hidden="true">▾</span>
-        </button>
-      </header>
+      <StationBar stations={stations} station={station} />
 
       {!online && (
         <Banner tone="warn">
@@ -106,16 +93,6 @@ export function WeatherScreen() {
         <p>Fuente: SMN{updatedAt ? ` · Actualizado ${formatDateTime(updatedAt)}` : ''}</p>
         {forecastQ.data?.meta.note && <p>{forecastQ.data.meta.note}</p>}
       </footer>
-
-      {stations && (
-        <StationPicker
-          open={pickerOpen}
-          stations={stations}
-          selectedId={station?.id ?? null}
-          onSelect={setStationId}
-          onClose={() => setPickerOpen(false)}
-        />
-      )}
     </>
   )
 }
