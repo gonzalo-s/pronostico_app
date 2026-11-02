@@ -30,11 +30,14 @@ app/
 features/
   weather/                        # v1: CurrentCard, ForecastDays, StationPicker, hooks
 lib/
-  api.ts                          # fetch tipado (v1 + tipos de history/nearest ya definidos)
+  schemas.ts                      # esquemas zod del contrato (v1 + history/nearest ya definidos); tipos TS derivados
+  api.ts                          # fetch que valida cada respuesta con schemas.ts
   format.ts                       # formato de números, hora ART, viento
   proxyAllowlist.ts
   useStation.tsx                  # estación activa (contexto + localStorage)
 components/ui/                    # piezas compartidas (BottomSheet, Banner, Skeleton)
+test/fixtures/                    # respuestas reales de la API (ver "Contrato con la API")
+scripts/refresh-fixtures.ts       # refresca los fixtures desde la API en vivo
 ```
 
 Funciones futuras entran como `features/history`, `features/geolocation`, `features/stations-search`, con rutas propias (`/history`, `/stations`) y navegación inferior por tabs que arranca con una sola pestaña.
@@ -66,10 +69,29 @@ Funciones futuras entran como `features/history`, `features/geolocation`, `featu
 ## Testing
 
 - Vitest + Testing Library: formateadores, expansión de días/pasos, estados nulo/error/desactualizado de los componentes, y `useStation` (persistencia, default).
+- Tests de contrato: los esquemas zod validan los fixtures reales (incluidos nulos y casos borde) y rechazan respuestas con campos faltantes o de tipo incorrecto. Los tests de componentes usan los mismos fixtures.
 - Tests del proxy: solo rutas de la lista blanca, inyección de `X-API-Key`, rechazo de rutas no permitidas e `id` inválido, error genérico ante fallo upstream, y que la clave no aparezca en la respuesta.
 - Verificación visual en viewport móvil (375×812) antes de dar la v1 por terminada.
 
-## Contrato de la API usada
+## Contrato con la API
+
+### Fuente de verdad y versionado
+
+La API (`/v1`) es la dueña del contrato; la app consume solo `/v1`. Un cambio incompatible en la API implica una `/v2`, no un cambio silencioso. La app no depende de campos fuera de los listados abajo.
+
+### Validación en tiempo de ejecución
+
+`lib/schemas.ts` define un esquema zod por respuesta (sobre `data` y `meta`, además del formato de error `{ error: { code, message } }`); los tipos de TypeScript se derivan de los esquemas con `z.infer`, sin tipos escritos a mano en paralelo. Los campos que la API puede devolver nulos se declaran nulos de forma explícita. `lib/api.ts` valida cada respuesta; si no cumple el esquema, lanza un error tipado de "respuesta inesperada de la API" que la UI muestra como el estado de error (sin renderizar datos parciales ni exponer el detalle del esquema al usuario). Los esquemas de `history` y `nearest` se definen ahora aunque no tengan UI.
+
+### Fixtures reales
+
+`test/fixtures/` guarda respuestas reales de `stations`, `current` y `forecast`, con casos de nulos (por ejemplo `feels_like_c` y `precip_mm` nulos). `scripts/refresh-fixtures.ts` los refresca consultando la API en vivo; `SMN_API_URL` y `SMN_API_KEY` se toman del entorno de la terminal y nunca se escriben en los fixtures ni en el repo. Antes de commitear un fixture refrescado se revisa que no contenga datos sensibles. Al refrescar, los tests de contrato indican qué cambió.
+
+### Futuro
+
+Si hace falta una garantía más fuerte, la API podría publicar una spec OpenAPI y la app generar de ahí esquemas y tipos. Queda fuera de la v1 porque exige modificar el repo de la API.
+
+### Formas usadas (v1)
 
 Todas las respuestas de datos: `{ data, meta: { source, updated_at, note? } }`; los errores: `{ error: { code, message } }`.
 
