@@ -1,3 +1,5 @@
+import { WeatherScreen } from '@/features/weather/WeatherScreen'
+
 export default function Page() {
-  return <h1>Pronóstico</h1>
+  return <WeatherScreen />
 }
