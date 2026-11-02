@@ -67,6 +67,13 @@ describe('ForecastDays', () => {
     await userEvent.click(screen.getByRole('button', { name: /Hoy/ }))
     expect(screen.queryByText('15:00')).toBeNull()
   })
+  it('pasos sin lluvia dicen "Sin lluvia" en vez de "0,0 mm"', async () => {
+    render(<ForecastDays days={days} steps={steps} today="2026-11-02" />)
+    await userEvent.click(screen.getByRole('button', { name: /Hoy/ }))
+    const list = within(screen.getByRole('list', { name: 'Pasos de 3 horas' }))
+    expect(list.getAllByText('Sin lluvia').length).toBeGreaterThan(0)
+    expect(list.queryByText('0,0 mm')).toBeNull()
+  })
   it('pasos con nulos muestran "—"', async () => {
     render(<ForecastDays days={days} steps={steps} today="2026-11-02" />)
     await userEvent.click(screen.getByRole('button', { name: /Mañana/ }))

@@ -26,10 +26,14 @@ function StepList({ id, steps }: { id: string; steps: ForecastStep[] }) {
           <span>{formatTime(s.at)}</span>
           <span>{formatTemp(s.temp_c)}</span>
           <Wind dir={compass(s.wind_dir_deg)} deg={s.wind_dir_deg} kmh={s.wind_kmh} />
-          <span>
-            <RainIcon level={rainLevel(s.precip_mm, 'step')} />
-            {s.precip_mm === null ? EMPTY : formatValue(s.precip_mm, 'mm', 1)}
-          </span>
+          {s.precip_mm === 0 ? (
+            <span className="muted">Sin lluvia</span>
+          ) : (
+            <span>
+              <RainIcon level={rainLevel(s.precip_mm, 'step')} />
+              {s.precip_mm === null ? EMPTY : formatValue(s.precip_mm, 'mm', 1)}
+            </span>
+          )}
         </li>
       ))}
     </ul>
