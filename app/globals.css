@@ -81,6 +81,7 @@ button { font: inherit; color: inherit; }
 .chart { display: block; width: 100%; height: auto; margin-top: 8px; }
 .chart__line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
 .chart__dot { fill: var(--accent); }
-.chart__axis { display: flex; justify-content: space-between; margin-bottom: 12px; color: var(--muted); font-size: 0.75rem; }
 .stats--three { grid-template-columns: repeat(3, 1fr); }
 .station-distance { margin: -8px 0 0; }
+.chart__grid { stroke: var(--border); stroke-width: 1; }
+.chart__tick { fill: var(--muted); font-size: 11px; }

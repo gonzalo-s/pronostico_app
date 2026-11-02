@@ -4,10 +4,10 @@ import type { HistoryPoint } from '@/lib/schemas'
 export type HistoryRange = '24h' | '7d' | '31d'
 export type MetricKey = 'temp_c' | 'humidity_pct' | 'pressure_hpa' | 'wind_kmh'
 
-export const RANGES: readonly { key: HistoryRange; label: string; phrase: string }[] = [
-  { key: '24h', label: '24 h', phrase: 'últimas 24 horas' },
-  { key: '7d', label: '7 días', phrase: 'últimos 7 días' },
-  { key: '31d', label: '31 días', phrase: 'últimos 31 días' },
+export const RANGES: readonly { key: HistoryRange; label: string; phrase: string; hours: number }[] = [
+  { key: '24h', label: '24 h', phrase: 'últimas 24 horas', hours: 24 },
+  { key: '7d', label: '7 días', phrase: 'últimos 7 días', hours: 7 * 24 },
+  { key: '31d', label: '31 días', phrase: 'últimos 31 días', hours: 31 * 24 },
 ]
 
 export const METRICS: readonly { key: MetricKey; label: string; format: (v: number | null) => string }[] = [
@@ -20,8 +20,10 @@ export const METRICS: readonly { key: MetricKey; label: string; format: (v: numb
 export interface Box {
   width: number
   height: number
-  padX: number
-  padY: number
+  padLeft: number
+  padRight: number
+  padTop: number
+  padBottom: number
 }
 
 export interface Series {
@@ -30,6 +32,10 @@ export interface Series {
   min: number
   max: number
   last: number | null
+  /** Cantidad de puntos con valor */
+  count: number
+  /** Marcas del eje Y (de mayor a menor) con su posición */
+  ticks: { value: number; y: number }[]
   t0: number
   t1: number
 }
@@ -48,10 +54,10 @@ export function buildSeries(points: HistoryPoint[], key: MetricKey, box: Box): S
   const hi = min === max ? max + 1 : max
   const t0 = rows[0].t
   const t1 = rows[rows.length - 1].t
-  const innerW = box.width - 2 * box.padX
-  const innerH = box.height - 2 * box.padY
-  const x = (t: number) => box.padX + (t1 === t0 ? innerW / 2 : ((t - t0) / (t1 - t0)) * innerW)
-  const y = (v: number) => box.padY + (1 - (v - lo) / (hi - lo)) * innerH
+  const innerW = box.width - box.padLeft - box.padRight
+  const innerH = box.height - box.padTop - box.padBottom
+  const x = (t: number) => box.padLeft + (t1 === t0 ? innerW / 2 : ((t - t0) / (t1 - t0)) * innerW)
+  const y = (v: number) => box.padTop + (1 - (v - lo) / (hi - lo)) * innerH
 
   const segments: { x: number; y: number }[][] = []
   let current: { x: number; y: number }[] = []
@@ -66,5 +72,9 @@ export function buildSeries(points: HistoryPoint[], key: MetricKey, box: Box): S
   if (current.length > 0) segments.push(current)
 
   const lastRow = [...rows].reverse().find((r) => r.v !== null)
-  return { segments, min, max, last: lastRow?.v ?? null, t0, t1 }
+  const ticks =
+    min === max
+      ? [{ value: min, y: y(min) }]
+      : [max, (min + max) / 2, min].map((value) => ({ value, y: y(value) }))
+  return { segments, min, max, last: lastRow?.v ?? null, count: values.length, ticks, t0, t1 }
 }

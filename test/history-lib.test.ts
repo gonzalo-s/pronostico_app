@@ -6,7 +6,7 @@ const pt = (hour: number, temp: number | null): HistoryPoint => ({
   at: `2026-11-02T${String(hour).padStart(2, '0')}:00:00.000Z`,
   temp_c: temp, humidity_pct: 50, pressure_hpa: 1010, wind_dir_deg: 90, wind_kmh: 10,
 })
-const box = { width: 100, height: 50, padX: 10, padY: 5 }
+const box = { width: 100, height: 50, padLeft: 10, padRight: 10, padTop: 5, padBottom: 5 }
 
 describe('buildSeries', () => {
   it('escala x por tiempo e y por mín/máx (arriba = valor alto)', () => {
@@ -39,6 +39,24 @@ describe('buildSeries', () => {
   it('todos nulos o sin puntos → null', () => {
     expect(buildSeries([pt(0, null), pt(1, null)], 'temp_c', box)).toBeNull()
     expect(buildSeries([], 'temp_c', box)).toBeNull()
+  })
+  it('el área de dibujo respeta los márgenes izquierdo y derecho distintos', () => {
+    const wide = { width: 100, height: 50, padLeft: 40, padRight: 10, padTop: 5, padBottom: 15 }
+    const s = buildSeries([pt(0, 10), pt(12, 30)], 'temp_c', wide)!
+    expect(s.segments[0].map((p) => p.x)).toEqual([40, 90])
+    expect(s.segments[0].map((p) => p.y)).toEqual([35, 5]) // mínimo en alto - padBottom, máximo en padTop
+  })
+  it('marcas del eje Y: máximo, medio y mínimo con su posición', () => {
+    const s = buildSeries([pt(0, 10), pt(6, 20), pt(12, 30)], 'temp_c', box)!
+    expect(s.ticks).toEqual([
+      { value: 30, y: 5 },
+      { value: 20, y: 25 },
+      { value: 10, y: 45 },
+    ])
+  })
+  it('serie plana: una sola marca al medio', () => {
+    const s = buildSeries([pt(0, 15), pt(1, 15)], 'temp_c', box)!
+    expect(s.ticks).toEqual([{ value: 15, y: 25 }])
   })
   it('lee la métrica pedida', () => {
     const s = buildSeries([pt(0, 10), pt(1, 10)], 'pressure_hpa', box)!

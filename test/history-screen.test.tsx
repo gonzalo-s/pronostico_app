@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { HistoryScreen } from '@/features/history/HistoryScreen'
+import { formatDateTime } from '@/lib/format'
 import { stationsResponse } from '@/lib/schemas'
 import { pickDefaultStation } from '@/lib/stations'
 import stationsJson from './fixtures/stations.json'
@@ -30,6 +31,41 @@ describe('HistoryScreen', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '24 h' })).toHaveAttribute('aria-pressed', 'true')
     expect(screen.getByRole('button', { name: 'Temperatura' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('muestra el rango real de datos y la cantidad de puntos', async () => {
+    mockFetch({ stations: { body: stationsJson }, [key('24h')]: history([row(10, 12), row(14, 24), row(18, 20)]) })
+    renderWithProviders(<HistoryScreen />)
+    await screen.findByRole('img', { name: /Temperatura/ })
+    expect(
+      screen.getByText(
+        `Datos del ${formatDateTime('2026-11-02T10:00:00.000Z')} al ${formatDateTime('2026-11-02T18:00:00.000Z')} · 3 puntos`,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('en 7 y 31 días avisa cuando el histórico guardado es más corto que el período', async () => {
+    mockFetch({
+      stations: { body: stationsJson },
+      [key('24h')]: history([row(10, 12), row(18, 20)]),
+      [key('7d')]: history([row(10, 12), row(18, 20)]),
+    })
+    renderWithProviders(<HistoryScreen />)
+    await screen.findByRole('img', { name: /últimas 24 horas/ })
+    expect(screen.queryByText(/de datos guardados/)).toBeNull()
+    await userEvent.click(screen.getByRole('button', { name: '7 días' }))
+    expect(await screen.findByText(/Solo hay 8 h de datos guardados para esta estación/)).toBeInTheDocument()
+  })
+
+  it('si el histórico cubre el período no muestra el aviso', async () => {
+    const rows = Array.from({ length: 24 }, (_, i) => row(i, 10 + i))
+    mockFetch({
+      stations: { body: stationsJson },
+      [key('24h')]: history(rows),
+    })
+    renderWithProviders(<HistoryScreen />)
+    await screen.findByRole('img', { name: /Temperatura/ })
+    expect(screen.queryByText(/de datos guardados/)).toBeNull()
   })
 
   it('cambiar de métrica redibuja con su unidad', async () => {
