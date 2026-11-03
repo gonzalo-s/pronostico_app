@@ -47,10 +47,13 @@ export function PullToRefresh() {
 
   const pulling = pull > 0
   if (!pulling && !fetching) return null
-  const text = pulling ? (pull >= THRESHOLD ? 'Soltá para actualizar' : 'Tirá para actualizar') : 'Actualizando…'
+  const label = pulling ? (pull >= THRESHOLD ? 'Soltá para actualizar' : 'Tirá para actualizar') : 'Actualizando'
   return (
-    <div className="ptr" role="status" style={pulling ? { transform: `translateY(${pull / 2}px)` } : undefined}>
-      {text}
+    <div className="ptr" role="status" aria-label={label} style={pulling ? { transform: `translateY(${pull / 2}px)` } : undefined}>
+      <span
+        className={pulling ? 'ptr__spinner' : 'ptr__spinner ptr__spinner--spin'}
+        style={pulling ? { rotate: `${pull * 3}deg`, opacity: Math.min(1, pull / THRESHOLD) } : undefined}
+      />
     </div>
   )
 }

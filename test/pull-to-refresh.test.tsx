@@ -64,12 +64,14 @@ describe('PullToRefresh', () => {
     expect(spy).not.toHaveBeenCalled()
   })
 
-  it('muestra el aviso mientras se arrastra y lo oculta al soltar', () => {
+  it('muestra el loader mientras se arrastra y lo oculta al soltar', () => {
     setup()
     touch('touchStart', 10)
     touch('touchMove', 200)
-    expect(screen.getByRole('status')).toHaveTextContent('Soltá para actualizar')
+    const status = screen.getByRole('status', { name: 'Soltá para actualizar' })
+    expect(status.querySelector('.ptr__spinner')).not.toBeNull()
+    expect(status).toHaveTextContent('')
     touch('touchEnd', 200)
-    expect(screen.queryByText('Soltá para actualizar')).toBeNull()
+    expect(screen.queryByRole('status')).toBeNull()
   })
 })
