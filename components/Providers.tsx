@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState, type ReactNode } from 'react'
+import { PullToRefresh } from '@/components/PullToRefresh'
 import { shouldRetry } from '@/lib/api'
 import { StationProvider } from '@/lib/useStation'
 
@@ -16,7 +17,10 @@ export function Providers({ children }: { children: ReactNode }) {
   )
   return (
     <QueryClientProvider client={client}>
-      <StationProvider>{children}</StationProvider>
+      <StationProvider>
+        <PullToRefresh />
+        {children}
+      </StationProvider>
     </QueryClientProvider>
   )
 }

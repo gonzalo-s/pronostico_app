@@ -11,7 +11,12 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+/* Evita el "tirar para recargar" nativo: lo reemplaza PullToRefresh, que solo recarga los datos. */
+html { overscroll-behavior-y: contain; }
 button { font: inherit; color: inherit; }
+.ptr { position: fixed; top: env(safe-area-inset-top); left: 50%; z-index: 20; margin-top: 8px; padding: 6px 14px; border-radius: 999px;
+  background: var(--card); color: var(--fg); border: 1px solid var(--border); font-size: 0.875rem; pointer-events: none;
+  translate: -50% 0; }
 .app { max-width: 480px; margin: 0 auto; display: grid; gap: 16px;
   padding: max(16px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); }
 .muted { color: var(--muted); font-size: 0.875rem; }
