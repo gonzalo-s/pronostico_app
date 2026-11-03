@@ -64,7 +64,20 @@ export const historyPointSchema = z.object({
   wind_kmh: nullableNumber,
 })
 
-export const errorSchema = z.object({
+export const tideCurrentSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+  at: z.string(),
+  height_m: z.number(),
+  updated_at: z.string(),
+})
+
+export const tideReadingSchema = z.object({
+  at: z.string(),
+  height_m: nullableNumber,
+})
+
+export const errorSchema =z.object({
   error: z.object({ code: z.string(), message: z.string() }),
 })
 
@@ -75,12 +88,16 @@ export const forecastResponse = envelope(
   z.object({ steps: z.array(forecastStepSchema), days: z.array(forecastDaySchema) }),
 )
 export const historyResponse = envelope(z.array(historyPointSchema))
+export const tideCurrentResponse = envelope(tideCurrentSchema)
+export const tideHeightsResponse = envelope(z.array(tideReadingSchema))
 
 export type Station = z.infer<typeof stationSchema>
 export type Current = z.infer<typeof currentSchema>
 export type ForecastStep = z.infer<typeof forecastStepSchema>
 export type ForecastDay = z.infer<typeof forecastDaySchema>
 export type HistoryPoint = z.infer<typeof historyPointSchema>
-export type StationsResponse = z.infer<typeof stationsResponse>
+export type TideCurrent = z.infer<typeof tideCurrentSchema>
+export type TideReading = z.infer<typeof tideReadingSchema>
+export type StationsResponse= z.infer<typeof stationsResponse>
 export type CurrentResponse = z.infer<typeof currentResponse>
 export type ForecastResponse = z.infer<typeof forecastResponse>

@@ -6,9 +6,12 @@ export const ALLOWED_ROUTES: readonly RegExp[] = [
   new RegExp(`^stations/${ID}/current$`),
   new RegExp(`^stations/${ID}/forecast$`),
   new RegExp(`^stations/${ID}/history$`),
+  new RegExp(`^tides/stations/${ID}/current$`),
+  new RegExp(`^tides/stations/${ID}/heights$`),
 ]
 
-export const HISTORY_ROUTE = new RegExp(`^stations/${ID}/history$`)
+// Rutas que reciben ?range= y se traducen a from/to calculados por el servidor
+export const HISTORY_ROUTE = new RegExp(`^(stations/${ID}/history|tides/stations/${ID}/heights)$`)
 
 export function isAllowedPath(path: string): boolean {
   return ALLOWED_ROUTES.some((route) => route.test(path))

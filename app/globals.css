@@ -1,12 +1,14 @@
 :root {
   --bg: #f5f7fa; --fg: #14213d; --muted: #5b6b82; --card: #fff; --accent: #0b3d91; --border: #e1e6ee;
   --warn: #fff4d6; --warn-fg: #6b4e00; --err: #fde8e8; --err-fg: #8a1c1c; --wind-se: #c62828;
+  --tide-0: #0b3d91; --tide-1: #f4a3a3; --tide-2: #e85d5d; --tide-3: #c62828; --tide-4: #7f0000;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0e1626; --fg: #e8eefc; --muted: #9fb0cc; --card: #16223a; --accent: #6ea8ff; --border: #25324d;
     --warn: #3a2f10; --warn-fg: #ffd98a; --err: #3d1a1a; --err-fg: #ffb4b4; --wind-se: #ff6b6b;
+    --tide-0: #6ea8ff; --tide-1: #ffb3b3; --tide-2: #ff7a7a; --tide-3: #ff3d3d; --tide-4: #ff0a0a;
   }
 }
 * { box-sizing: border-box; }
@@ -28,6 +30,7 @@ button { font: inherit; color: inherit; }
 .wind--se { color: var(--wind-se); font-weight: 600; }
 
 .header { display: flex; }
+.header--stack { flex-direction: column; align-items: flex-start; }
 .station-btn { display: flex; align-items: baseline; gap: 8px; min-height: 44px; padding: 8px 12px; width: 100%;
   background: var(--card); border: 1px solid var(--border); border-radius: 12px; text-align: left; cursor: pointer; }
 .station-btn__name { font-weight: 600; font-size: 1.125rem; }
@@ -90,6 +93,20 @@ button { font: inherit; color: inherit; }
 .chart { display: block; width: 100%; height: auto; margin-top: 8px; }
 .chart__line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
 .chart__dot { fill: var(--accent); }
+.chart--touch { touch-action: pan-y; cursor: crosshair; }
+.chart__piece { stroke-width: 2.5; stroke-linecap: round; }
+.chart__limit { stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.7; }
+.chart__cursor { stroke: var(--muted); stroke-width: 1; }
+.chart__pick { stroke: var(--card); stroke-width: 2; }
+.chart__readout { min-height: 1.4em; margin: 4px 0; text-align: center; }
+.tide-l0 { stroke: var(--tide-0); fill: var(--tide-0); }
+.tide-l1 { stroke: var(--tide-1); fill: var(--tide-1); }
+.tide-l2 { stroke: var(--tide-2); fill: var(--tide-2); }
+.tide-l3 { stroke: var(--tide-3); fill: var(--tide-3); }
+.tide-l4 { stroke: var(--tide-4); fill: var(--tide-4); }
+.chart__pick.tide-l0, .chart__pick.tide-l1, .chart__pick.tide-l2, .chart__pick.tide-l3, .chart__pick.tide-l4 { stroke: var(--card); }
+.tide-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 4px 0 8px; padding: 0; list-style: none; font-size: 0.75rem; color: var(--muted); }
+.tide-legend__swatch { display: inline-block; width: 10px; height: 10px; margin-right: 4px; border-radius: 2px; stroke: none; }
 .stats--three { grid-template-columns: repeat(3, 1fr); }
 .station-distance { margin: -8px 0 0; }
 .chart__grid { stroke: var(--border); stroke-width: 1; }

@@ -1,5 +1,4 @@
 import { formatTemp, formatValue } from '@/lib/format'
-import type { HistoryPoint } from '@/lib/schemas'
 
 export type HistoryRange = '24h' | '7d' | '31d'
 export type MetricKey = 'temp_c' | 'humidity_pct' | 'pressure_hpa' | 'wind_kmh'
@@ -38,9 +37,18 @@ export interface Series {
   ticks: { value: number; y: number }[]
   t0: number
   t1: number
+  /** Puntos con valor, con su posición (para interacción y coloreado) */
+  points: { t: number; v: number; x: number; y: number; seg: number }[]
+  /** Posición vertical de un valor dentro del gráfico */
+  yOf: (v: number) => number
 }
 
-export function buildSeries(points: HistoryPoint[], key: MetricKey, box: Box): Series | null {
+export function buildSeries<K extends string>(
+  points: ({ at: string } & Record<K, number | null>)[],
+  key: K,
+  box: Box,
+  tickCount = 3,
+): Series | null {
   const rows = points
     .map((p) => ({ t: Date.parse(p.at), v: p[key] }))
     .filter((r) => Number.isFinite(r.t))
@@ -75,6 +83,18 @@ export function buildSeries(points: HistoryPoint[], key: MetricKey, box: Box): S
   const ticks =
     min === max
       ? [{ value: min, y: y(min) }]
-      : [max, (min + max) / 2, min].map((value) => ({ value, y: y(value) }))
-  return { segments, min, max, last: lastRow?.v ?? null, count: values.length, ticks, t0, t1 }
+      : Array.from({ length: tickCount }, (_, i) => max - ((max - min) * i) / (tickCount - 1)).map((value) => ({
+          value,
+          y: y(value),
+        }))
+  const placed: Series['points'] = []
+  let seg = 0
+  for (const r of rows) {
+    if (r.v === null) {
+      if (placed.length > 0 && placed[placed.length - 1].seg === seg) seg++
+    } else {
+      placed.push({ t: r.t, v: r.v, x: x(r.t), y: y(r.v), seg })
+    }
+  }
+  return { segments, min, max, last: lastRow?.v ?? null, count: values.length, ticks, t0, t1, points: placed, yOf: y }
 }

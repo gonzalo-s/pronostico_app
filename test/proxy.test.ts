@@ -19,7 +19,7 @@ afterEach(() => {
 })
 
 describe('isAllowedPath', () => {
-  it.each(['stations', 'stations/nearest', 'stations/5/current', 'stations/123/forecast', 'stations/5/history'])('permite %s', (p) => {
+  it.each(['stations', 'stations/nearest', 'stations/5/current', 'stations/123/forecast', 'stations/5/history', 'tides/stations/2/current', 'tides/stations/2/heights'])('permite %s', (p) => {
     expect(isAllowedPath(p)).toBe(true)
   })
   it.each([
@@ -27,6 +27,8 @@ describe('isAllowedPath', () => {
     'stations/0/history', 'stations/5/history/extra', 'stations/abc/history', 'stations/nearest/extra', 'stations/Nearest', 'stations/1/current/extra', '../stations', '', 'stations/',
     'stations/05/current', 'stations/12345678901/current', 'Stations', 'stations/5/CURRENT',
     'stations//5/current', 'stations\n',
+    'tides', 'tides/stations', 'tides/stations/nearest', 'tides/stations/0/heights', 'tides/stations/abc/current',
+    'tides/stations/2/heights/extra', 'tides/stations/2/other',
   ])('rechaza %s', (p) => {
     expect(isAllowedPath(p)).toBe(false)
   })
@@ -181,6 +183,18 @@ describe('GET stations/:id/history', () => {
       `https://api.test/v1/stations/5/history?from=${encodeURIComponent('2026-10-26T18:00:00.000Z')}&to=${encodeURIComponent('2026-11-02T18:00:00.000Z')}`,
     )
     expect((init.headers as Record<string, string>)['X-API-Key']).toBe('secret-test-key')
+  })
+  it('tides/stations/:id/heights usa el mismo from/to calculado por el servidor', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-02T18:47:12.345Z'))
+    const fetchMock = vi.fn(async () => new Response('{"data":[]}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await callQ(['tides', 'stations', '2', 'heights'], 'range=24h&from=2000-01-01')
+    expect(res.status).toBe(200)
+    const [url] = fetchMock.mock.calls[0] as unknown as [string]
+    expect(url).toBe(
+      `https://api.test/v1/tides/stations/2/heights?from=${encodeURIComponent('2026-11-01T18:00:00.000Z')}&to=${encodeURIComponent('2026-11-02T18:00:00.000Z')}`,
+    )
   })
   it('período inválido o ausente → 400 sin llamar al upstream', async () => {
     const fetchMock = vi.fn()

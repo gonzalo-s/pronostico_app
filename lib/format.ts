@@ -8,6 +8,8 @@ export function formatValue(v: number | null, unit: string, digits = 0): string 
   return v === null ? EMPTY : `${v.toFixed(digits).replace('.', ',')} ${unit}`
 }
 
+export const formatHeight = (v: number | null): string => formatValue(v, 'm', 2)
+
 export const formatAltitude = (m: number | null): string | null => (m === null ? null : `${Math.round(m)} m s. n. m.`)
 
 export function formatDistance(km: number): string {

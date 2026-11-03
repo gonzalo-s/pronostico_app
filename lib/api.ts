@@ -3,6 +3,7 @@ import { roundCoord } from '@/lib/geolocation'
 import type { HistoryRange } from '@/lib/history'
 import {
   currentResponse, forecastResponse, historyResponse, nearestStationResponse, stationsResponse,
+  tideCurrentResponse, tideHeightsResponse,
 } from '@/lib/schemas'
 
 export type ApiErrorKind = 'not_found' | 'network' | 'upstream' | 'contract'
@@ -43,6 +44,9 @@ export const getCurrent = (id: number) => getJson(`stations/${id}/current`, curr
 export const getForecast = (id: number) => getJson(`stations/${id}/forecast`, forecastResponse)
 export const getHistory = (id: number, range: HistoryRange) =>
   getJson(`stations/${id}/history?range=${range}`, historyResponse)
+export const getTideCurrent = (id: number) => getJson(`tides/stations/${id}/current`, tideCurrentResponse)
+export const getTideHeights = (id: number, range: HistoryRange) =>
+  getJson(`tides/stations/${id}/heights?range=${range}`, tideHeightsResponse)
 export const getNearestStation = (lat: number, lon: number) =>
   getJson(`stations/nearest?lat=${roundCoord(lat)}&lon=${roundCoord(lon)}`, nearestStationResponse)
 

@@ -7,4 +7,5 @@ export interface Tab {
 export const TABS: readonly Tab[] = [
   { href: '/', label: 'Clima' },
   { href: '/history', label: 'Histórico' },
+  { href: '/tides', label: 'Mareas' },
 ]
