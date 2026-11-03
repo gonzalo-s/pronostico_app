@@ -4,6 +4,24 @@ export const TIDE_LEVELS: readonly number[] = [2, 2.5, 3, 3.5]
 /** 0 = bajo el primer umbral; 1..4 = rojo creciente */
 export const levelOf = (v: number): number => TIDE_LEVELS.filter((th) => v >= th).length
 
+const TRENDS = {
+  rising: { arrow: '↑', label: 'Subiendo' },
+  falling: { arrow: '↓', label: 'Bajando' },
+  steady: { arrow: '→', label: 'Estable' },
+} as const
+
+/** Texto de tendencia ("Subiendo · +0,12 m/h"); null si la API no pudo calcularla */
+export function trendInfo(
+  trend: 'rising' | 'falling' | 'steady' | 'unknown',
+  changeMPerHour: number | null,
+): { arrow: string; text: string } | null {
+  if (trend === 'unknown') return null
+  const { arrow, label } = TRENDS[trend]
+  if (changeMPerHour === null) return { arrow, text: label }
+  const sign = changeMPerHour > 0 ? '+' : changeMPerHour < 0 ? '−' : ''
+  return { arrow, text: `${label} · ${sign}${Math.abs(changeMPerHour).toFixed(2).replace('.', ',')} m/h` }
+}
+
 interface P {
   x: number
   y: number

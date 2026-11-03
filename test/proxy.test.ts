@@ -19,7 +19,7 @@ afterEach(() => {
 })
 
 describe('isAllowedPath', () => {
-  it.each(['stations', 'stations/nearest', 'stations/5/current', 'stations/123/forecast', 'stations/5/history', 'tides/stations/2/current', 'tides/stations/2/heights'])('permite %s', (p) => {
+  it.each(['stations', 'stations/nearest', 'stations/5/current', 'stations/123/forecast', 'stations/5/history', 'tides/stations/2/current', 'tides/stations/2/heights', 'tides/stations/2/extremes', 'tides/stations/2/forecast'])('permite %s', (p) => {
     expect(isAllowedPath(p)).toBe(true)
   })
   it.each([
@@ -28,7 +28,7 @@ describe('isAllowedPath', () => {
     'stations/05/current', 'stations/12345678901/current', 'Stations', 'stations/5/CURRENT',
     'stations//5/current', 'stations\n',
     'tides', 'tides/stations', 'tides/stations/nearest', 'tides/stations/0/heights', 'tides/stations/abc/current',
-    'tides/stations/2/heights/extra', 'tides/stations/2/other',
+    'tides/stations/2/heights/extra', 'tides/stations/2/other', 'tides/stations/0/extremes', 'tides/stations/2/forecast/extra',
   ])('rechaza %s', (p) => {
     expect(isAllowedPath(p)).toBe(false)
   })
@@ -195,6 +195,19 @@ describe('GET stations/:id/history', () => {
     expect(url).toBe(
       `https://api.test/v1/tides/stations/2/heights?from=${encodeURIComponent('2026-11-01T18:00:00.000Z')}&to=${encodeURIComponent('2026-11-02T18:00:00.000Z')}`,
     )
+  })
+  it('tides/stations/:id/extremes usa from/to del servidor y forecast no lleva query', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date('2026-11-02T18:47:12.345Z'))
+    const fetchMock = vi.fn(async () => new Response('{"data":[]}', { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    await callQ(['tides', 'stations', '2', 'extremes'], 'range=7d&from=2000-01-01')
+    await callQ(['tides', 'stations', '2', 'forecast'], 'from=2000-01-01')
+    const urls = fetchMock.mock.calls.map((c) => (c as unknown as [string])[0])
+    expect(urls[0]).toBe(
+      `https://api.test/v1/tides/stations/2/extremes?from=${encodeURIComponent('2026-10-26T18:00:00.000Z')}&to=${encodeURIComponent('2026-11-02T18:00:00.000Z')}`,
+    )
+    expect(urls[1]).toBe('https://api.test/v1/tides/stations/2/forecast')
   })
   it('período inválido o ausente → 400 sin llamar al upstream', async () => {
     const fetchMock = vi.fn()

@@ -70,11 +70,26 @@ export const tideCurrentSchema = z.object({
   at: z.string(),
   height_m: z.number(),
   updated_at: z.string(),
+  trend: z.enum(['rising', 'falling', 'steady', 'unknown']),
+  change_m_per_hour: nullableNumber,
 })
 
 export const tideReadingSchema = z.object({
   at: z.string(),
   height_m: nullableNumber,
+})
+
+// Pleamar (high) o bajamar (low), observada (extremes) o prevista (forecast)
+export const tideEventSchema = z.object({
+  kind: z.enum(['high', 'low']),
+  at: z.string(),
+  height_m: z.number(),
+})
+
+export const tideForecastSchema = z.object({
+  valid_from: z.string(),
+  valid_to: z.string().nullable(),
+  events: z.array(tideEventSchema),
 })
 
 export const errorSchema =z.object({
@@ -90,6 +105,8 @@ export const forecastResponse = envelope(
 export const historyResponse = envelope(z.array(historyPointSchema))
 export const tideCurrentResponse = envelope(tideCurrentSchema)
 export const tideHeightsResponse = envelope(z.array(tideReadingSchema))
+export const tideExtremesResponse = envelope(z.array(tideEventSchema))
+export const tideForecastResponse = envelope(tideForecastSchema)
 
 export type Station = z.infer<typeof stationSchema>
 export type Current = z.infer<typeof currentSchema>
@@ -98,6 +115,7 @@ export type ForecastDay = z.infer<typeof forecastDaySchema>
 export type HistoryPoint = z.infer<typeof historyPointSchema>
 export type TideCurrent = z.infer<typeof tideCurrentSchema>
 export type TideReading = z.infer<typeof tideReadingSchema>
+export type TideEvent = z.infer<typeof tideEventSchema>
 export type StationsResponse= z.infer<typeof stationsResponse>
 export type CurrentResponse = z.infer<typeof currentResponse>
 export type ForecastResponse = z.infer<typeof forecastResponse>

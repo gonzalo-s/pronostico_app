@@ -12,7 +12,8 @@
   }
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+/* Columna a pantalla completa: el contenido se estira y la barra inferior queda siempre al pie, aunque haya poco contenido */
+body { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
 /* Evita el "tirar para recargar" nativo: lo reemplaza PullToRefresh, que solo recarga los datos. */
 html { overscroll-behavior-y: contain; }
 button { font: inherit; color: inherit; }
@@ -23,7 +24,7 @@ button { font: inherit; color: inherit; }
 .ptr__spinner--spin { animation: ptr-spin 0.8s linear infinite; }
 @keyframes ptr-spin { to { rotate: 360deg; } }
 @media (prefers-reduced-motion: reduce) { .ptr__spinner--spin { animation-duration: 2s; } }
-.app { max-width: 480px; margin: 0 auto; display: grid; gap: 16px;
+.app { flex: 1; width: 100%; max-width: 480px; margin: 0 auto; display: grid; align-content: start; gap: 16px;
   padding: max(16px, env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); }
 .muted { color: var(--muted); font-size: 0.875rem; }
 .wind__arrow { width: 1em; height: 1em; margin-right: 4px; vertical-align: -0.15em; }
@@ -82,7 +83,7 @@ button { font: inherit; color: inherit; }
   background: none; border: 0; border-bottom: 1px solid var(--border); text-align: left; cursor: pointer; }
 .stationlist button[aria-current='true'] { color: var(--accent); font-weight: 600; }
 
-.bottomnav { position: sticky; bottom: 0; display: flex; justify-content: space-around; padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+.bottomnav { flex: none; position: sticky; bottom: 0; display: flex; justify-content: space-around; padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
   background: var(--card); border-top: 1px solid var(--border); }
 .bottomnav a { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 16px; color: var(--muted); text-decoration: none; }
 .bottomnav a[aria-current='page'] { color: var(--accent); font-weight: 600; }
@@ -106,6 +107,12 @@ button { font: inherit; color: inherit; }
 .tide-l4 { stroke: var(--tide-4); fill: var(--tide-4); }
 .chart__pick.tide-l0, .chart__pick.tide-l1, .chart__pick.tide-l2, .chart__pick.tide-l3, .chart__pick.tide-l4 { stroke: var(--card); }
 .tide-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 4px 0 8px; padding: 0; list-style: none; font-size: 0.75rem; color: var(--muted); }
+.tide-events { margin: 4px 0 0; padding: 0; list-style: none; }
+.tide-events li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid var(--border); }
+.tide-events li:first-child { border-top: 0; }
+.tide-events__kind { flex: 1; }
+.tide-events__height { font-weight: 600; }
+.tide-trend { margin: 4px 0 0; font-size: 1.1rem; }
 .tide-legend__swatch { display: inline-block; width: 10px; height: 10px; margin-right: 4px; border-radius: 2px; stroke: none; }
 .stats--three { grid-template-columns: repeat(3, 1fr); }
 .station-distance { margin: -8px 0 0; }
