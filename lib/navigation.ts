@@ -8,4 +8,5 @@ export const TABS: readonly Tab[] = [
   { href: '/', label: 'Clima' },
   { href: '/history', label: 'Histórico' },
   { href: '/tides', label: 'Mareas' },
+  { href: '/crecida', label: 'Crecida' },
 ]

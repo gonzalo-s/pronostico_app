@@ -3,6 +3,7 @@
   --warn: #fff4d6; --warn-fg: #6b4e00; --err: #fde8e8; --err-fg: #8a1c1c; --wind-se: #c62828;
   --tide-0: #0b3d91; --tide-1: #f4a3a3; --tide-2: #e85d5d; --tide-3: #c62828; --tide-4: #7f0000;
   --river-alert: #a86a00; --river-evac: #c62828;
+  --flood-0: #2e7d32; --flood-1: #d99a00; --flood-2: #e85d5d; --flood-3: #c62828; --flood-4: #7f0000;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -10,6 +11,7 @@
     --bg: #0e1626; --fg: #e8eefc; --muted: #9fb0cc; --card: #16223a; --accent: #6ea8ff; --border: #25324d;
     --warn: #3a2f10; --warn-fg: #ffd98a; --err: #3d1a1a; --err-fg: #ffb4b4; --wind-se: #ff6b6b;
     --river-alert: #f6c445; --river-evac: #ff6b6b;
+    --flood-0: #66bb6a; --flood-1: #f6c445; --flood-2: #ff7a7a; --flood-3: #ff3d3d; --flood-4: #ff0a0a;
     --tide-0: #6ea8ff; --tide-1: #ffb3b3; --tide-2: #ff7a7a; --tide-3: #ff3d3d; --tide-4: #ff0a0a;
   }
 }
@@ -109,6 +111,15 @@ button { font: inherit; color: inherit; }
 .tide-l4 { stroke: var(--tide-4); fill: var(--tide-4); }
 .chart__pick.tide-l0, .chart__pick.tide-l1, .chart__pick.tide-l2, .chart__pick.tide-l3, .chart__pick.tide-l4 { stroke: var(--card); }
 .tide-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 4px 0 8px; padding: 0; list-style: none; font-size: 0.75rem; color: var(--muted); }
+.flood-card { border-left: 6px solid var(--border); }
+.flood-level { margin: 0 0 4px; font-size: 1.75rem; font-weight: 600; line-height: 1.1; }
+.flood-signals { margin: 0; padding: 0; list-style: none; }
+.flood-signals li { padding: 8px 0; border-top: 1px solid var(--border); }
+.flood-signals li:first-child { border-top: 0; padding-top: 0; }
+.flood-signals p { margin: 2px 0; }
+.flood-signal__head { display: flex; justify-content: space-between; gap: 8px; }
+.flood-badge { padding: 0 8px; border-radius: 999px; font-size: 0.75rem; line-height: 1.6; border: 1px solid var(--border); color: var(--muted); }
+.flood-badge--active { background: var(--warn); color: var(--warn-fg); border-color: transparent; font-weight: 600; }
 .river-band { fill: var(--accent); opacity: 0.15; stroke: none; }
 .river-band--inner { opacity: 0.2; }
 .river-main { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
