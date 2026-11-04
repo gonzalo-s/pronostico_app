@@ -92,7 +92,57 @@ export const tideForecastSchema = z.object({
   events: z.array(tideEventSchema),
 })
 
-export const errorSchema =z.object({
+const riverLevelsSchema = z.object({
+  alert_m: nullableNumber,
+  evacuation_m: nullableNumber,
+  low_water_m: nullableNumber,
+})
+
+export const riverStationSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+  river: z.string(),
+  lat: z.number(),
+  lon: z.number(),
+  alert_level_m: nullableNumber,
+  evacuation_level_m: nullableNumber,
+  low_water_level_m: nullableNumber,
+  has_forecast: z.boolean(),
+})
+
+export const riverCurrentSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+  river: z.string(),
+  at: z.string(),
+  height_m: z.number(),
+  updated_at: z.string(),
+  change_24h_m: nullableNumber,
+  thresholds: z.object({ date: z.string(), p90_m: nullableNumber, p99_m: nullableNumber }).nullable(),
+  level_band: z.enum(['above_p99', 'above_p90', 'normal', 'unknown']),
+  levels: riverLevelsSchema.nullable(),
+  official_level: z.enum(['evacuation', 'alert', 'low_water', 'normal', 'unknown']),
+})
+
+export const riverReadingSchema = z.object({ at: z.string(), height_m: z.number() })
+
+export const riverForecastPointSchema = z.object({
+  at: z.string(),
+  main_m: z.number(),
+  p05_m: z.number(),
+  p25_m: z.number(),
+  p75_m: z.number(),
+  p95_m: z.number(),
+})
+
+export const riverForecastSchema = z.object({
+  issued_at: z.string(),
+  model: z.string(),
+  levels: riverLevelsSchema.nullable(),
+  points: z.array(riverForecastPointSchema),
+})
+
+export const errorSchema = z.object({
   error: z.object({ code: z.string(), message: z.string() }),
 })
 
@@ -107,6 +157,10 @@ export const tideCurrentResponse = envelope(tideCurrentSchema)
 export const tideHeightsResponse = envelope(z.array(tideReadingSchema))
 export const tideExtremesResponse = envelope(z.array(tideEventSchema))
 export const tideForecastResponse = envelope(tideForecastSchema)
+export const riverStationsResponse = envelope(z.array(riverStationSchema))
+export const riverCurrentResponse = envelope(riverCurrentSchema)
+export const riverHeightsResponse = envelope(z.array(riverReadingSchema))
+export const riverForecastResponse = envelope(riverForecastSchema)
 
 export type Station = z.infer<typeof stationSchema>
 export type Current = z.infer<typeof currentSchema>
@@ -116,6 +170,10 @@ export type HistoryPoint = z.infer<typeof historyPointSchema>
 export type TideCurrent = z.infer<typeof tideCurrentSchema>
 export type TideReading = z.infer<typeof tideReadingSchema>
 export type TideEvent = z.infer<typeof tideEventSchema>
+export type RiverStation = z.infer<typeof riverStationSchema>
+export type RiverCurrent = z.infer<typeof riverCurrentSchema>
+export type RiverReading = z.infer<typeof riverReadingSchema>
+export type RiverForecast = z.infer<typeof riverForecastSchema>
 export type StationsResponse= z.infer<typeof stationsResponse>
 export type CurrentResponse = z.infer<typeof currentResponse>
 export type ForecastResponse = z.infer<typeof forecastResponse>

@@ -8,6 +8,7 @@
     "start": "next start",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
+    "gen-api-types": "npx openapi-typescript https://pronosticoapi-api-ten.vercel.app/v1/openapi.json -o src/api.d.ts",
     "refresh-fixtures": "tsx scripts/refresh-fixtures.ts",
     "make-icons": "node scripts/make-icons.mjs"
   },

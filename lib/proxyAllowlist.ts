@@ -10,10 +10,16 @@ export const ALLOWED_ROUTES: readonly RegExp[] = [
   new RegExp(`^tides/stations/${ID}/heights$`),
   new RegExp(`^tides/stations/${ID}/extremes$`),
   new RegExp(`^tides/stations/${ID}/forecast$`),
+  /^rivers\/stations$/,
+  new RegExp(`^rivers/stations/${ID}/current$`),
+  new RegExp(`^rivers/stations/${ID}/heights$`),
+  new RegExp(`^rivers/stations/${ID}/forecast$`),
 ]
 
 // Rutas que reciben ?range= y se traducen a from/to calculados por el servidor
-export const HISTORY_ROUTE = new RegExp(`^(stations/${ID}/history|tides/stations/${ID}/(heights|extremes))$`)
+export const HISTORY_ROUTE = new RegExp(
+  `^(stations/${ID}/history|tides/stations/${ID}/(heights|extremes)|rivers/stations/${ID}/heights)$`,
+)
 
 export function isAllowedPath(path: string): boolean {
   return ALLOWED_ROUTES.some((route) => route.test(path))
@@ -33,6 +39,7 @@ export function nearestQuery(params: URLSearchParams): string | null {
 const HOUR_MS = 3600_000
 const HISTORY_RANGES: Record<string, number> = {
   '24h': 24 * HOUR_MS,
+  '48h': 48 * HOUR_MS,
   '7d': 7 * 24 * HOUR_MS,
   '31d': 31 * 24 * HOUR_MS,
 }

@@ -2,12 +2,14 @@
   --bg: #f5f7fa; --fg: #14213d; --muted: #5b6b82; --card: #fff; --accent: #0b3d91; --border: #e1e6ee;
   --warn: #fff4d6; --warn-fg: #6b4e00; --err: #fde8e8; --err-fg: #8a1c1c; --wind-se: #c62828;
   --tide-0: #0b3d91; --tide-1: #f4a3a3; --tide-2: #e85d5d; --tide-3: #c62828; --tide-4: #7f0000;
+  --river-alert: #a86a00; --river-evac: #c62828;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0e1626; --fg: #e8eefc; --muted: #9fb0cc; --card: #16223a; --accent: #6ea8ff; --border: #25324d;
     --warn: #3a2f10; --warn-fg: #ffd98a; --err: #3d1a1a; --err-fg: #ffb4b4; --wind-se: #ff6b6b;
+    --river-alert: #f6c445; --river-evac: #ff6b6b;
     --tide-0: #6ea8ff; --tide-1: #ffb3b3; --tide-2: #ff7a7a; --tide-3: #ff3d3d; --tide-4: #ff0a0a;
   }
 }
@@ -107,6 +109,30 @@ button { font: inherit; color: inherit; }
 .tide-l4 { stroke: var(--tide-4); fill: var(--tide-4); }
 .chart__pick.tide-l0, .chart__pick.tide-l1, .chart__pick.tide-l2, .chart__pick.tide-l3, .chart__pick.tide-l4 { stroke: var(--card); }
 .tide-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 4px 0 8px; padding: 0; list-style: none; font-size: 0.75rem; color: var(--muted); }
+.river-band { fill: var(--accent); opacity: 0.15; stroke: none; }
+.river-band--inner { opacity: 0.2; }
+.river-main { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.river-reading { fill: var(--fg); }
+.river-now { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.river-pick { fill: var(--accent); stroke: var(--card); stroke-width: 2; }
+.river-level { stroke-width: 1.2; stroke-dasharray: 4 3; }
+.river-level--alert { stroke: var(--river-alert); }
+.river-level--evacuation { stroke: var(--river-evac); }
+.river-level--lowWater { stroke: var(--muted); }
+.river-level__label { font-size: 10px; }
+.river-level__label--alert { fill: var(--river-alert); }
+.river-level__label--evacuation { fill: var(--river-evac); }
+.river-level__label--lowWater { fill: var(--muted); }
+.river-key { display: inline-block; width: 12px; height: 8px; margin-right: 4px; border-radius: 2px; }
+.river-key--main { background: var(--accent); }
+.river-key--band { background: var(--accent); opacity: 0.25; }
+.river-key--reading { width: 6px; height: 6px; border-radius: 50%; background: var(--fg); }
+.river-status { margin: 4px 0 0; font-weight: 600; }
+.river-status--evac { color: var(--river-evac); }
+.river-status--alert { color: var(--river-alert); }
+.river-notice { margin: 0 0 8px; padding: 8px 12px; border-radius: 10px; font-size: 0.875rem; }
+.river-notice--alert { background: var(--warn); color: var(--warn-fg); }
+.river-notice--evacuation { background: var(--err); color: var(--err-fg); }
 .tide-events { margin: 4px 0 0; padding: 0; list-style: none; }
 .tide-events li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid var(--border); }
 .tide-events li:first-child { border-top: 0; }

@@ -3,6 +3,7 @@ import { roundCoord } from '@/lib/geolocation'
 import type { HistoryRange } from '@/lib/history'
 import {
   currentResponse, forecastResponse, historyResponse, nearestStationResponse, stationsResponse,
+  riverCurrentResponse, riverForecastResponse, riverHeightsResponse, riverStationsResponse,
   tideCurrentResponse, tideExtremesResponse, tideForecastResponse, tideHeightsResponse,
 } from '@/lib/schemas'
 
@@ -50,6 +51,11 @@ export const getTideHeights = (id: number, range: HistoryRange) =>
 export const getTideExtremes = (id: number, range: HistoryRange) =>
   getJson(`tides/stations/${id}/extremes?range=${range}`, tideExtremesResponse)
 export const getTideForecast = (id: number) => getJson(`tides/stations/${id}/forecast`, tideForecastResponse)
+export const getRiverStations = () => getJson('rivers/stations', riverStationsResponse)
+export const getRiverCurrent = (id: number) => getJson(`rivers/stations/${id}/current`, riverCurrentResponse)
+export const getRiverForecast = (id: number) => getJson(`rivers/stations/${id}/forecast`, riverForecastResponse)
+export const getRiverHeights = (id: number, range: '24h' | '48h') =>
+  getJson(`rivers/stations/${id}/heights?range=${range}`, riverHeightsResponse)
 export const getNearestStation = (lat: number, lon: number) =>
   getJson(`stations/nearest?lat=${roundCoord(lat)}&lon=${roundCoord(lon)}`, nearestStationResponse)
 

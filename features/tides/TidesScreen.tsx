@@ -10,6 +10,7 @@ import { RANGES, type HistoryRange } from '@/lib/history'
 import { useOnline } from '@/lib/useOnline'
 import { errorMessage } from '@/features/weather/errorMessage'
 import { trendInfo } from '@/lib/tides'
+import { RiverSection } from '@/features/river/RiverSection'
 import { TideChart } from './TideChart'
 import { TideEvents } from './TideEvents'
 import { useTideCurrent, useTideExtremes, useTideForecast, useTideHeights } from './hooks'
@@ -115,6 +116,8 @@ export function TidesScreen() {
         )}
       </section>
 
+      <RiverSection now={now} />
+
       <section className="card" aria-labelledby="tide-forecast-title">
         <h2 id="tide-forecast-title" className="card__title">Próximas pleamares y bajamares</h2>
         {forecastBody()}
@@ -130,6 +133,8 @@ export function TidesScreen() {
 
       <footer className="footer muted">
         <p>Fuente: SHN{updatedAt ? ` · Actualizado ${formatDateTime(updatedAt)}` : ''}</p>
+        <p>Río: datos del INA y Prefectura Naval Argentina; modelo del INA con datos del SHN y del SMN. Las alturas del río y las de la marea tienen distinto cero y no son comparables.</p>
+        <p>Información de referencia, no es un pronóstico ni una alerta oficial.</p>
         <p>Alturas medidas por el mareógrafo de San Fernando; las pleamares y bajamares previstas son el pronóstico del SHN. La marea en Tigre y Victoria puede diferir levemente, y el viento (sudestada) la modifica.</p>
       </footer>
     </>

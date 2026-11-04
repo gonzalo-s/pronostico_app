@@ -29,6 +29,7 @@ const routes = (over: Record<string, { status?: number; body: unknown }> = {}) =
   'tides/stations/2/heights?range=24h': heights([reading(10, 0.4), reading(14, 1.8), reading(18, 1.23)]),
   'tides/stations/2/extremes?range=24h': { body: { data: [], meta } },
   'tides/stations/2/forecast': noForecast,
+  'rivers/stations': { body: { data: [], meta } },
   ...over,
 })
 
